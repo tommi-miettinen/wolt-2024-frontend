@@ -87,3 +87,10 @@ export const calculateDeliveryFee = (distance: number, cartValue: number, itemCo
 
   return Math.min(MAX_DELIVERY_FEE, fee);
 };
+
+export const isRushHour = (datetime: string) => {
+  const date = new Date(datetime);
+  const hour = date.getHours();
+
+  return hour >= 15 && hour <= 19;
+};

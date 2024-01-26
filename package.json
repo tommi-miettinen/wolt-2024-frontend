@@ -13,11 +13,13 @@
   "dependencies": {
     "@testing-library/react": "^14.1.2",
     "date-fns": "^3.3.1",
+    "i18next": "^23.7.20",
     "jsdom": "^24.0.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-datetime": "^3.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^14.0.1",
     "vitest": "^1.2.2",
     "zod": "^3.22.2"
   },
