@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Omnes bold";
+  src: url("./assets/fonts/Omnes Bold.otf") format("opentype");
+}
