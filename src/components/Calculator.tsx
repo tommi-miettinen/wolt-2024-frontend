@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { calcDeliveryFee, isRushHour } from "../services/feeCalculationService";
+import { getDeliveryFee, isRushHour } from "../services/feeCalculationService";
 import NumberInput from "./NumberInput";
 import { useTranslation } from "react-i18next";
 import { TranslationKeys } from "../i18n";
@@ -16,7 +16,7 @@ const Calculator = () => {
   useEffect(() => {
     if (!distance || !cartValue || !itemCount || !datetime) return;
 
-    const fee = calcDeliveryFee({
+    const fee = getDeliveryFee({
       distance,
       cartValue,
       itemCount,

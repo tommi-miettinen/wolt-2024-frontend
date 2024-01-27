@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import * as matchers from "@testing-library/jest-dom/matchers";
-import { calcDeliveryFee } from "../../services/feeCalculationService";
+import { getDeliveryFee } from "../../services/feeCalculationService";
 import Calculator from "../../components/Calculator";
 
 expect.extend(matchers);
@@ -35,7 +35,7 @@ describe("Fee calculation", () => {
     fireEvent.change(itemCountInput, { target: { value: "5" } });
     fireEvent.change(distanceInput, { target: { value: "1000" } });
 
-    const fee = calcDeliveryFee({ distance: 1000, cartValue: 50, itemCount: 5 });
+    const fee = getDeliveryFee({ distance: 1000, cartValue: 50, itemCount: 5 });
     const feeNode = getByTestId("fee");
 
     expect(fee).toBe(2.5);
@@ -65,7 +65,7 @@ describe("Fee calculation", () => {
     expect(distanceInput).toHaveFocus();
     await userEvent.type(distanceInput, "1000");
 
-    const fee = calcDeliveryFee({ distance: 1000, cartValue: 50, itemCount: 5 });
+    const fee = getDeliveryFee({ distance: 1000, cartValue: 50, itemCount: 5 });
     const feeNode = getByTestId("fee");
 
     expect(fee).toBe(2.5);
