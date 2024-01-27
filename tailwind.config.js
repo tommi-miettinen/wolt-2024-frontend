@@ -18,8 +18,8 @@ export default {
         "body-accent": colors.purple[50],
         "body-1": colors.purple[100],
         primary: colors.black,
-        text: colors.black,
-        "text-inverse": colors.white,
+        "text-primary": colors.black,
+        "text-primary-inverse": colors.white,
       },
 
       dark: {
@@ -27,8 +27,8 @@ export default {
         "body-accent": "#1E1E1E",
         "body-1": "#1E1E1E",
         primary: colors.white,
-        text: colors.white,
-        "text-inverse": colors.black,
+        "text-primary": colors.white,
+        "text-primary-inverse": colors.black,
       },
     }),
   ],
