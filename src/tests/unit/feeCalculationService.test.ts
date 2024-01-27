@@ -1,9 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
-  getSmallOrderSurcharge,
-  getFeeByDistance,
   getDeliveryFee,
-  getBulkFee,
+  internals,
   isRushHour,
   MAX_FEE,
   FREE_CART_THRESHOLD,
@@ -43,7 +41,7 @@ describe(`If the cart value is less than ${SmallOrder.MIN_VALUE}€, a small ord
  The surcharge is the difference between the cart value and ${SmallOrder.MIN_VALUE}€.`, () => {
   smallOrderTestCases.forEach(({ condition, cartValue, expected }) => {
     it(`returns ${expected} when ${condition}`, () => {
-      expect(getSmallOrderSurcharge(cartValue)).toBe(expected);
+      expect(internals.getSmallOrderSurcharge(cartValue)).toBe(expected);
     });
   });
 });
@@ -74,7 +72,7 @@ const distanceTestCases = [
 describe("Fee by distance", () => {
   distanceTestCases.forEach(({ condition, distance, expected }) => {
     it(`returns ${expected} when ${condition}`, () => {
-      expect(getFeeByDistance(distance)).toBe(expected);
+      expect(internals.getFeeByDistance(distance)).toBe(expected);
     });
   });
 });
@@ -110,7 +108,7 @@ const bulkFeeTestCases = [
 describe("Fee by item count", () => {
   bulkFeeTestCases.forEach(({ condition, itemCount, expected }) => {
     it(`returns ${expected} when ${condition}`, () => {
-      expect(getBulkFee(itemCount)).toBe(expected);
+      expect(internals.getBulkFee(itemCount)).toBe(expected);
     });
   });
 });
@@ -131,7 +129,7 @@ const deliveryFeeCases = [
   },
   {
     condition: `Cart value is over ${FREE_CART_THRESHOLD}€`,
-    cartValue: FREE_CART_THRESHOLD,
+    cartValue: FREE_CART_THRESHOLD + 1,
     expected: 0,
   },
   {
@@ -152,7 +150,7 @@ const deliveryFeeCases = [
     expected: MAX_FEE,
   },
   {
-    condition: `If cart value exceeds or equals ${FREE_CART_THRESHOLD}€, delivery is free. Rush hour does not affect this.`,
+    condition: `If cart value equals ${FREE_CART_THRESHOLD}€, delivery is free. Rush hour does not affect this.`,
     cartValue: FREE_CART_THRESHOLD,
     isRushHour: true,
     expected: 0,

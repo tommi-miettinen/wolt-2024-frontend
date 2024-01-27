@@ -17,7 +17,7 @@ describe("App", () => {
     const { getByTestId } = render(<App />);
 
     const skipLink = getByTestId("skipLink");
-    const main = getByTestId("main");
+    const main = document.querySelector("main") as HTMLElement;
 
     await userEvent.tab();
     expect(skipLink).toHaveFocus();

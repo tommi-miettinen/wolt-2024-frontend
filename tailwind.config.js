@@ -6,6 +6,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      backgroundImage: {
+        "hero-image": "url('/src/woltbg.jpg')",
+      },
       fontFamily: {
         "omnes-bold": ["Omnes bold", "sans"],
       },
@@ -20,15 +23,16 @@ export default {
         primary: colors.black,
         "text-primary": colors.black,
         "text-primary-inverse": colors.white,
+        "border-color": colors.gray[300],
       },
-
       dark: {
         body: colors.black,
-        "body-accent": "#1E1E1E",
+        "body-accent": colors.gray[950],
         "body-1": "#1E1E1E",
         primary: colors.white,
         "text-primary": colors.white,
         "text-primary-inverse": colors.black,
+        "border-color": colors.gray[900],
       },
     }),
   ],
