@@ -14,6 +14,7 @@ export enum TranslationKeys {
   NUMBER_OF_ITEMS_PLACEHOLDER = "numberOfItemsPlaceholder",
   DELIVERY_DISTANCE_PLACEHOLDER = "deliveryDistancePlaceholder",
   COST_OF_DELIVERY_INCOMPLETE_INPUT = "costOfDeliveryIncompleteInput",
+  SKIP_TO_MAIN_CONTENT = "skipToMainContent",
 }
 
 i18n.use(initReactI18next).init({

@@ -1,8 +1,6 @@
 import { useState, ChangeEvent } from "react";
 
-type CustomInputElement = Omit<JSX.IntrinsicElements["input"], "onChange">;
-
-interface NumberInputProps extends CustomInputElement {
+interface NumberInputProps extends Omit<JSX.IntrinsicElements["input"], "onChange"> {
   value: number;
   onChange: (value: number) => void;
   minValue?: number;

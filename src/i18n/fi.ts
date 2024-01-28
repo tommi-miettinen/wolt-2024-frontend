@@ -9,6 +9,7 @@ const fi = {
   numberOfItemsPlaceholder: "Montako tuotetta korissasi on?",
   deliveryDistancePlaceholder: "Kuinka kaukana ravintolasta olet?",
   costOfDeliveryIncompleteInput: "Täytä kaikki kentät nähdäksesi kuljetuksen hinnan",
+  skipToMainContent: "Siirry pääsisältöön",
 };
 
 export default fi;
