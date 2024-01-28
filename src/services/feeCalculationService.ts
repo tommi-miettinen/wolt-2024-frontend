@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z, ZodError } from "zod";
 
 export const FREE_CART_THRESHOLD = 200;
 export const MAX_FEE = 15;
@@ -35,11 +35,11 @@ export interface DeliveryFeeInput {
   distance: number;
   cartValue: number;
   itemCount: number;
-  isRushHour?: boolean;
+  date: Date;
 }
 
-export const isRushHour = (datetime: string) => {
-  const date = new Date(datetime);
+export const isRushHour = (date: Date) => {
+  z.date().parse(date);
   const day = date.getDay();
   const hour = date.getHours();
   return hour >= RushHour.START && hour < RushHour.END && day === RushHour.DAY;
@@ -70,40 +70,55 @@ const getFeeByDistance = (distance: number) => {
   return DistanceFees.BASE + additionalFee;
 };
 
-export const validateDeliveryFeeInput = (deliveryFeeInput: DeliveryFeeInput) => {
-  return z
-    .object({
-      distance: z.number().nonnegative(),
-      cartValue: z.number().nonnegative(),
-      itemCount: z.number().nonnegative(),
-      isRushHour: z.boolean().optional(),
-    })
-    .safeParse(deliveryFeeInput);
-};
-
 /**
  * Uses the validateDeliveryFeeInput function to validate the input.
  * @throws {Error} Throws an error if the input validation fails.
  */
 export const getDeliveryFee = (deliveryFeeInput: DeliveryFeeInput) => {
-  const validationResult = validateDeliveryFeeInput(deliveryFeeInput);
-  if (!validationResult.success) throw new Error(validationResult.error.message);
+  const { distance, cartValue, itemCount, date } = deliveryFeeInput;
 
-  const { distance, cartValue, itemCount, isRushHour } = deliveryFeeInput;
-
-  if (cartValue >= FREE_CART_THRESHOLD) return 0;
+  z.object({
+    distance: z.number().positive(),
+    cartValue: z.number().positive(),
+    itemCount: z.number().positive(),
+    date: z.date(),
+  }).parse(deliveryFeeInput);
 
   let fee = 0;
+
+  if (cartValue >= FREE_CART_THRESHOLD) return fee;
+
   fee += getSmallOrderSurcharge(cartValue);
   fee += getFeeByDistance(distance);
   fee += getBulkFee(itemCount);
-  if (isRushHour) fee = fee * RushHour.COST_MULTIPLIER;
+
+  if (isRushHour(date)) {
+    fee = fee * RushHour.COST_MULTIPLIER;
+  }
 
   return Math.min(MAX_FEE, fee);
+};
+
+type DeliveryFeeWithHooks = (
+  input: DeliveryFeeInput,
+  hooks: {
+    onSuccess?: (fee: number) => void;
+    onError?: (error: ZodError) => void;
+  }
+) => void;
+
+export const deliveryFeeWithHooks: DeliveryFeeWithHooks = (deliveryFeeInput, hooks) => {
+  const { onSuccess, onError } = hooks;
+  try {
+    onSuccess && onSuccess(getDeliveryFee(deliveryFeeInput));
+  } catch (e) {
+    onError && onError(e as ZodError);
+  }
 };
 
 export const internals = {
   getSmallOrderSurcharge,
   getBulkFee,
   getFeeByDistance,
+  isRushHour,
 };

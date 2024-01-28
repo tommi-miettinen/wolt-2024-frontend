@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getDeliveryFee, isRushHour, validateDeliveryFeeInput } from "../services/feeCalculationService";
+import { deliveryFeeWithHooks } from "../services/feeCalculationService";
 import NumberInput from "./NumberInput";
 import { useTranslation } from "react-i18next";
 import { TranslationKeys } from "../i18n";
@@ -14,22 +14,19 @@ const Calculator = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    handleDeliveryFeeChange();
+    deliveryFeeWithHooks(
+      {
+        distance,
+        cartValue,
+        itemCount,
+        date: new Date(datetime),
+      },
+      {
+        onSuccess: (fee) => setDeliveryFee(fee),
+        onError: () => setDeliveryFee(0),
+      }
+    );
   }, [cartValue, distance, itemCount, datetime]);
-
-  const handleDeliveryFeeChange = () => {
-    const { success } = validateDeliveryFeeInput({ cartValue, distance, itemCount });
-    if (!success) return setDeliveryFee(0);
-
-    const fee = getDeliveryFee({
-      distance,
-      cartValue,
-      itemCount,
-      isRushHour: isRushHour(datetime),
-    });
-
-    setDeliveryFee(fee);
-  };
 
   return (
     <div tabIndex={-1} data-testid="calculator" className="flex flex-col gap-4 text-primary">
@@ -40,7 +37,8 @@ const Calculator = () => {
         <NumberInput
           id="cart-value"
           data-testid="cartValue"
-          placeholder="How much do your items cost?"
+          placeholder={t(TranslationKeys.CART_VALUE_PLACEHOLDER)}
+          maxValue={100000}
           className={inputStyle}
           value={cartValue}
           onChange={(value) => setCartValue(value)}
@@ -53,7 +51,8 @@ const Calculator = () => {
         <NumberInput
           id="item-count"
           isInteger
-          placeholder="How many items you have in your cart?"
+          maxValue={100000}
+          placeholder={t(TranslationKeys.NUMBER_OF_ITEMS_PLACEHOLDER)}
           data-testid="numberOfItems"
           className={inputStyle}
           value={itemCount}
@@ -66,9 +65,10 @@ const Calculator = () => {
         </label>
         <NumberInput
           id="distance"
-          placeholder="How far are you from the restaurant?"
+          placeholder={t(TranslationKeys.DELIVERY_DISTANCE_PLACEHOLDER)}
           isInteger
           data-testid="deliveryDistance"
+          maxValue={1000000}
           className={inputStyle}
           value={distance}
           onChange={(value) => setDistance(value)}

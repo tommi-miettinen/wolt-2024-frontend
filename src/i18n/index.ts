@@ -10,6 +10,9 @@ export enum TranslationKeys {
   ORDER_DATE = "orderDate",
   COST_OF_DELIVERY = "costOfDelivery",
   CALCULATE_COST_OF_DELIVERY = "calculateCostOfDelivery",
+  CART_VALUE_PLACEHOLDER = "cartValuePlaceholder",
+  NUMBER_OF_ITEMS_PLACEHOLDER = "numberOfItemsPlaceholder",
+  DELIVERY_DISTANCE_PLACEHOLDER = "deliveryDistancePlaceholder",
 }
 
 i18n.use(initReactI18next).init({

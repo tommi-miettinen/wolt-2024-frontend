@@ -35,7 +35,7 @@ describe("Fee calculation", () => {
     fireEvent.change(itemCountInput, { target: { value: "5" } });
     fireEvent.change(distanceInput, { target: { value: "1000" } });
 
-    const fee = getDeliveryFee({ distance: 1000, cartValue: 50, itemCount: 5 });
+    const fee = getDeliveryFee({ distance: 1000, cartValue: 50, itemCount: 5, date: new Date() });
     const feeNode = getByTestId("fee");
 
     expect(fee).toBe(2.5);
@@ -65,7 +65,7 @@ describe("Fee calculation", () => {
     expect(distanceInput).toHaveFocus();
     await userEvent.type(distanceInput, "1000");
 
-    const fee = getDeliveryFee({ distance: 1000, cartValue: 50, itemCount: 5 });
+    const fee = getDeliveryFee({ distance: 1000, cartValue: 50, itemCount: 5, date: new Date() });
     const feeNode = getByTestId("fee");
 
     expect(fee).toBe(2.5);
