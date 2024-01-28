@@ -17,6 +17,10 @@ export enum TranslationKeys {
   SKIP_TO_MAIN_CONTENT = "skipToMainContent",
 }
 
+export type Translations = {
+  [key in TranslationKeys]: string;
+};
+
 i18n.use(initReactI18next).init({
   resources: {
     en: {

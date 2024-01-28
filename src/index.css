@@ -6,3 +6,7 @@
   font-family: "Omnes bold";
   src: url("./assets/fonts/Omnes Bold.otf") format("opentype");
 }
+
+* {
+  @apply transition-colors duration-500;
+}

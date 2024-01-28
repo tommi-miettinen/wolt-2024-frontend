@@ -1,4 +1,6 @@
-const en = {
+import { Translations } from "./index";
+
+const en: Translations = {
   calculateCostOfDelivery: "Calculate cost of delivery",
   cartValue: "Cart value",
   deliveryDistance: "Delivery distance (meters)",

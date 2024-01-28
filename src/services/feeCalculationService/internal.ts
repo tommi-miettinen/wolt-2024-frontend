@@ -1,36 +1,25 @@
 import { z } from "zod";
 import { DeliveryFeeInput } from "./types";
 
-export const FREE_CART_THRESHOLD = 200;
-export const MAX_FEE = 15;
+export const CART_VALUE_THRESHOLD_FOR_SURCHARGE = 10;
+export const MIN_CART_VALUE_FOR_FREE_DELIVERY = 200;
 
-export enum Distances {
-  BASE = 1000,
-  ADDITIONAL = 500,
-}
+export const MAX_DELIVERY_FEE = 15;
+export const INITIAL_DELIVERY_FEE = 2;
+export const ADDITIONAL_DISTANCE_FEE = 1;
 
-export enum DistanceFees {
-  BASE = 2,
-  ADDITIONAL = 1,
-}
+export const DISTANCE_AFTER_ADDITIONAL_FEE_STARTS = 1000;
+export const ADDITIONAL_DISTANCE_INTERVAL = 500;
 
-export enum SmallOrder {
-  MIN_VALUE = 10,
-}
+export const RUSH_HOUR_START_HOUR = 15;
+export const RUSH_HOUR_END_HOUR = 19;
+export const RUSH_HOUR_DAY = 5;
+export const RUSH_HOUR_FEE_MULTIPLIER = 1.2;
 
-export enum RushHour {
-  START = 15,
-  END = 19,
-  DAY = 5,
-  COST_MULTIPLIER = 1.2,
-}
-
-export enum BulkItems {
-  TIER_1 = 4,
-  TIER_2 = 12,
-  TIER_1_FEE = 0.5,
-  TIER_2_FEE = 1.2,
-}
+export const BULK_ITEMS_TIER_1_THRESHOLD = 4;
+export const BULK_ITEMS_TIER_2_THRESHOLD = 12;
+export const BULK_ITEMS_TIER_1_FEE = 0.5;
+export const BULK_ITEMS_TIER_2_FEE = 1.2;
 
 /**
  * @throws {ZodError} On invalid dates.
@@ -39,14 +28,24 @@ export const isRushHour = (date: Date) => {
   z.date().parse(date);
   const day = date.getDay();
   const hour = date.getHours();
-  return hour >= RushHour.START && hour < RushHour.END && day === RushHour.DAY;
+  return hour >= RUSH_HOUR_START_HOUR && hour < RUSH_HOUR_END_HOUR && day === RUSH_HOUR_DAY;
 };
 
+/**
+ * Meant for internal use only.
+ * @throws {ZodError} Throws an error if the input does not conform to the following validation rules:
+ *                - `cartValue` must be a positive number.
+ **/
 export const getSmallOrderSurcharge = (cartValue: number) => {
   z.number().positive().parse(cartValue);
-  return +Math.max(0, SmallOrder.MIN_VALUE - cartValue).toFixed(2);
+  return +Math.max(0, CART_VALUE_THRESHOLD_FOR_SURCHARGE - cartValue).toFixed(2);
 };
 
+/**
+ * Meant for internal use only.
+ * @throws {ZodError} Throws an error if the input does not conform to the following validation rules:
+ *                 - `itemCount` must be a positive number.
+ */
 export const getBulkFee = (itemCount: number) => {
   z.number().positive().parse(itemCount);
 
@@ -54,27 +53,32 @@ export const getBulkFee = (itemCount: number) => {
 
   let fee = 0;
 
-  const itemsBeyondTier1 = Math.max(itemCountRounded - BulkItems.TIER_1, 0);
-  fee += itemsBeyondTier1 * BulkItems.TIER_1_FEE;
+  const itemsBeyondTier1 = Math.max(itemCountRounded - BULK_ITEMS_TIER_1_THRESHOLD, 0);
+  fee += itemsBeyondTier1 * BULK_ITEMS_TIER_1_FEE;
 
-  if (itemCount > BulkItems.TIER_2) {
-    fee += BulkItems.TIER_2_FEE;
+  if (itemCount > BULK_ITEMS_TIER_2_THRESHOLD) {
+    fee += BULK_ITEMS_TIER_2_FEE;
   }
 
   return fee;
 };
 
+/**
+ * Meant for internal use only.
+ * @throws {ZodError} Throws an error if the input does not conform to the following validation rules:
+ *                 - `distance` must be a positive number.
+ */
 export const getFeeByDistance = (distance: number) => {
   z.number().positive().parse(distance);
   const distRounded = Math.round(distance);
 
-  if (distRounded <= Distances.BASE) return DistanceFees.BASE;
+  if (distRounded <= DISTANCE_AFTER_ADDITIONAL_FEE_STARTS) return INITIAL_DELIVERY_FEE;
 
-  const distanceBeyondBase = distRounded - Distances.BASE;
-  const intervalsOverBase = Math.ceil(distanceBeyondBase / Distances.ADDITIONAL);
-  const additionalFee = intervalsOverBase * DistanceFees.ADDITIONAL;
+  const distanceBeyondBase = distRounded - DISTANCE_AFTER_ADDITIONAL_FEE_STARTS;
+  const intervalsOverBase = Math.ceil(distanceBeyondBase / ADDITIONAL_DISTANCE_INTERVAL);
+  const additionalFee = intervalsOverBase * ADDITIONAL_DISTANCE_FEE;
 
-  return DistanceFees.BASE + additionalFee;
+  return INITIAL_DELIVERY_FEE + additionalFee;
 };
 
 /**
@@ -94,15 +98,15 @@ export const getDeliveryFee = (deliveryFeeInput: DeliveryFeeInput) => {
 
   let fee = 0;
 
-  if (cartValue >= FREE_CART_THRESHOLD) return fee;
+  if (cartValue >= MIN_CART_VALUE_FOR_FREE_DELIVERY) return fee;
 
   fee += getSmallOrderSurcharge(cartValue);
   fee += getFeeByDistance(distance);
   fee += getBulkFee(itemCount);
 
   if (isRushHour(date)) {
-    fee = fee * RushHour.COST_MULTIPLIER;
+    fee = fee * RUSH_HOUR_FEE_MULTIPLIER;
   }
 
-  return +Math.min(MAX_FEE, fee).toFixed(2);
+  return +Math.min(MAX_DELIVERY_FEE, fee).toFixed(2);
 };

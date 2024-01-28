@@ -1,4 +1,6 @@
-const fi = {
+import { Translations } from "./index";
+
+const fi: Translations = {
   calculateCostOfDelivery: "Laske toimituksen hinta",
   cartValue: "Korin arvo",
   deliveryDistance: "Toimitusmatka (metreinä)",

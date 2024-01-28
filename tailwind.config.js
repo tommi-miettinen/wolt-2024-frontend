@@ -32,7 +32,7 @@ export default {
         primary: colors.white,
         "text-primary": colors.white,
         "text-primary-inverse": colors.black,
-        "border-color": colors.gray[900],
+        "border-color": colors.gray[700],
       },
     }),
   ],

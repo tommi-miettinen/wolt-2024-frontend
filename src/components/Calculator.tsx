@@ -1,4 +1,4 @@
-import { HTMLAttributes, useEffect, useState } from "react";
+import { Fragment, HTMLAttributes, useEffect, useState } from "react";
 import { getDeliveryFee } from "../services/feeCalculationService/internal";
 import NumberInput from "./NumberInput";
 import { useTranslation } from "react-i18next";
@@ -14,12 +14,12 @@ const FeeDisplay = ({ deliveryFee, isValidInput, ...rest }: FeeDisplayProps) => 
   return (
     <div {...rest}>
       {isValidInput ? (
-        <>
+        <Fragment>
           <span>{t(TranslationKeys.COST_OF_DELIVERY)} </span>
           <span data-test-id="fee" className="font-semibold">
             {deliveryFee.toFixed(2)}€
           </span>
-        </>
+        </Fragment>
       ) : (
         <span>{t(TranslationKeys.COST_OF_DELIVERY_INCOMPLETE_INPUT)}</span>
       )}
