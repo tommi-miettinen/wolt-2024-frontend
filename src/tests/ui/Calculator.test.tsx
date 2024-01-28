@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, fireEvent, configure } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import * as matchers from "@testing-library/jest-dom/matchers";
@@ -7,6 +7,13 @@ import Calculator from "../../components/Calculator";
 
 configure({ testIdAttribute: "data-test-id" });
 expect.extend(matchers);
+
+const NOT_RUSH_HOUR = new Date("2021-01-01T12:00:00.000Z");
+
+beforeEach(() => {
+  vi.useFakeTimers();
+  vi.setSystemTime(NOT_RUSH_HOUR);
+});
 
 describe("Fee calculation", () => {
   it("Renders the inputs correctly and allows them to be changed", () => {
@@ -36,11 +43,11 @@ describe("Fee calculation", () => {
     fireEvent.change(itemCountInput, { target: { value: "5" } });
     fireEvent.change(distanceInput, { target: { value: "1000" } });
 
-    const fee = getDeliveryFee({ distance: 1000, cartValue: 50, itemCount: 5, date: new Date() });
+    const fee = getDeliveryFee({ distance: 1000, cartValue: 50, itemCount: 5, date: NOT_RUSH_HOUR });
     const feeNode = getByTestId("fee");
 
     expect(fee).toBe(2.5);
-    expect(feeNode).toHaveTextContent(fee!.toString());
+    expect(feeNode).toHaveTextContent(fee.toString());
   });
 
   it("Inputs have correct types", () => {
@@ -70,14 +77,16 @@ describe("Fee calculation", () => {
   });
 
   it("Is keyboard accessible", async () => {
+    vi.useRealTimers();
     const { getByTestId } = render(<Calculator />);
 
     const calculator = getByTestId("calculator");
-    const cartValueInput = getByTestId("cartValue");
-    const itemCountInput = getByTestId("numberOfItems");
-    const distanceInput = getByTestId("deliveryDistance");
+    const cartValueInput = getByTestId("cartValue") as HTMLInputElement;
+    const itemCountInput = getByTestId("numberOfItems") as HTMLInputElement;
+    const distanceInput = getByTestId("deliveryDistance") as HTMLInputElement;
 
     calculator.focus();
+
     expect(calculator).toHaveFocus();
 
     await userEvent.tab();
@@ -92,10 +101,8 @@ describe("Fee calculation", () => {
     expect(distanceInput).toHaveFocus();
     await userEvent.type(distanceInput, "1000");
 
-    const fee = getDeliveryFee({ distance: 1000, cartValue: 50, itemCount: 5, date: new Date() });
-    const feeNode = getByTestId("fee");
-
-    expect(fee).toBe(2.5);
-    expect(feeNode).toHaveTextContent(fee.toString());
+    expect(cartValueInput.value).toBe("50");
+    expect(itemCountInput.value).toBe("5");
+    expect(distanceInput.value).toBe("1000");
   });
 });
