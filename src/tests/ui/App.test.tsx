@@ -16,7 +16,7 @@ describe("App", () => {
     await userEvent.tab();
     expect(skipLink).toHaveFocus();
 
-    main.focus();
+    await userEvent.keyboard("{enter}");
     expect(main).toHaveFocus();
   });
 });

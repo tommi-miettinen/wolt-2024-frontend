@@ -29,7 +29,7 @@ describe(`If the cart value is less than 10€, a small order surcharge is added
     expect(getSmallOrderSurcharge(10)).toBe(0);
   });
 
-  it("Invalid inputs default to 0", () => {
+  it("Throws on invalid inputs", () => {
     expect(() => getSmallOrderSurcharge(0)).toThrow();
     expect(() => getSmallOrderSurcharge(-1)).toThrow();
     // @ts-expect-error
@@ -41,6 +41,11 @@ describe(`A delivery fee for the first 1000 meters (=1km) is 2€.
 If the delivery distance is longer than that, 1€ is added for every additional 500 meters that 
 the courier needs to travel before reaching the destination. 
 Even if the distance would be shorter than 500 meters, the minimum fee is always 1€. `, () => {
+  it("If the delivery distance is less than the base distance (1km), the delivery fee is 2€", () => {
+    expect(getFeeByDistance(1)).toBe(2);
+    expect(getFeeByDistance(999)).toBe(2);
+  });
+
   it("If the delivery distance is 1499 meters, the delivery fee is 3€", () => {
     expect(getFeeByDistance(1499)).toBe(3);
   });
@@ -53,6 +58,12 @@ Even if the distance would be shorter than 500 meters, the minimum fee is always
     expect(getFeeByDistance(1501)).toBe(4);
   });
 
+  it("If floats get through, they get rounded", () => {
+    expect(getFeeByDistance(1499.9)).toBe(3);
+    expect(getFeeByDistance(1500.4)).toBe(3);
+    expect(getFeeByDistance(1501.5)).toBe(4);
+  });
+
   it("Throws on invalid inputs", () => {
     expect(() => getFeeByDistance(0)).toThrow();
     expect(() => getFeeByDistance(-1)).toThrow();
@@ -63,6 +74,10 @@ Even if the distance would be shorter than 500 meters, the minimum fee is always
 
 describe(`If the number of items is five or more, an additional 50 cent surcharge is added for each item above
  and including the fifth item. An extra "bulk" fee applies for more than 12 items of 1,20€.`, () => {
+  it("If the number of items is less than 4, no extra surcharge", () => {
+    expect(getBulkFee(3)).toBe(0);
+  });
+
   it("If the number of items is 4, no extra surcharge", () => {
     expect(getBulkFee(4)).toBe(0);
   });
@@ -81,6 +96,10 @@ describe(`If the number of items is five or more, an additional 50 cent surcharg
 
   it("If the number of items is 14, 6.20€ surcharge is added ((10 * 50 cents) + 1.20€)", () => {
     expect(getBulkFee(14)).toBe(6.2);
+  });
+
+  it("If floats somehow get through, they get rounded", () => {
+    expect(getBulkFee(13.9)).toBe(6.2);
   });
 
   it("Throws on invalid inputs", () => {

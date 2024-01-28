@@ -50,9 +50,11 @@ export const getSmallOrderSurcharge = (cartValue: number) => {
 export const getBulkFee = (itemCount: number) => {
   z.number().positive().parse(itemCount);
 
+  const itemCountRounded = Math.round(itemCount);
+
   let fee = 0;
 
-  const itemsBeyondTier1 = Math.max(itemCount - BulkItems.TIER_1, 0);
+  const itemsBeyondTier1 = Math.max(itemCountRounded - BulkItems.TIER_1, 0);
   fee += itemsBeyondTier1 * BulkItems.TIER_1_FEE;
 
   if (itemCount > BulkItems.TIER_2) {
@@ -64,10 +66,11 @@ export const getBulkFee = (itemCount: number) => {
 
 export const getFeeByDistance = (distance: number) => {
   z.number().positive().parse(distance);
+  const distRounded = Math.round(distance);
 
-  if (distance <= Distances.BASE) return DistanceFees.BASE;
+  if (distRounded <= Distances.BASE) return DistanceFees.BASE;
 
-  const distanceBeyondBase = distance - Distances.BASE;
+  const distanceBeyondBase = distRounded - Distances.BASE;
   const intervalsOverBase = Math.ceil(distanceBeyondBase / Distances.ADDITIONAL);
   const additionalFee = intervalsOverBase * DistanceFees.ADDITIONAL;
 
@@ -101,5 +104,5 @@ export const getDeliveryFee = (deliveryFeeInput: DeliveryFeeInput) => {
     fee = fee * RushHour.COST_MULTIPLIER;
   }
 
-  return Math.min(MAX_FEE, fee);
+  return +Math.min(MAX_FEE, fee).toFixed(2);
 };
