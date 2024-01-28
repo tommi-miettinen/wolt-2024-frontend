@@ -1,15 +1,9 @@
-import { useState } from "react";
 import woltlogowhite from "../assets/woltlogowhite.svg";
 import woltlogoblack from "../assets/woltlogoblack.svg";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../hooks/useTheme";
 
-const focusMainContent = () => {
-  const mainContent = document.querySelector("main");
-  console.log(mainContent);
-  if (mainContent) {
-    mainContent.focus();
-  }
-};
+const focusMainContent = () => document.querySelector("main")?.focus();
 
 export const SkipLink = () => {
   return (
@@ -26,29 +20,11 @@ export const SkipLink = () => {
 };
 
 const Navbar = () => {
-  const [currentTheme, setCurrentTheme] = useState<string>(document.documentElement.getAttribute("data-theme") || "");
+  const { theme, toggleTheme } = useTheme();
   const { i18n } = useTranslation();
 
-  const changeLanguage = () => {
-    if (i18n.language === "en") {
-      i18n.changeLanguage("fi");
-    } else {
-      i18n.changeLanguage("en");
-    }
-  };
-
-  const toggleTheme = () => {
-    const currentTheme = document.documentElement.getAttribute("data-theme");
-    if (currentTheme === "light") {
-      document.documentElement.setAttribute("data-theme", "dark");
-      setCurrentTheme("dark");
-    } else {
-      document.documentElement.setAttribute("data-theme", "light");
-      setCurrentTheme("light");
-    }
-  };
-
-  const logo = currentTheme === "light" ? woltlogoblack : woltlogowhite;
+  const changeLanguage = () => (i18n.language === "en" ? i18n.changeLanguage("fi") : i18n.changeLanguage("en"));
+  const logo = theme === "light" ? woltlogoblack : woltlogowhite;
 
   return (
     <div className="bg-body border-b  border-border-color p-3.5 w-full flex items-center justify-center">
@@ -65,7 +41,7 @@ const Navbar = () => {
             className="py-2 px-2 sm:px-5 text-primary border border-border-color sm:duration-500 hover:shadow hover:text-sky-400 rounded-lg"
             onClick={toggleTheme}
           >
-            {currentTheme === "light" ? "Dark" : "Light"} theme
+            {theme === "light" ? "Dark" : "Light"} theme
           </button>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import * as matchers from "@testing-library/jest-dom/matchers";
-import { getDeliveryFee } from "../../services/feeCalculationService";
+import { getDeliveryFee } from "../../services/feeCalculationService/internal";
 import Calculator from "../../components/Calculator";
 
 expect.extend(matchers);
@@ -11,9 +11,9 @@ describe("Fee calculation", () => {
   it("Renders the inputs correctly and allows them to be changed", () => {
     const { getByTestId } = render(<Calculator />);
 
-    const cartValueInput = getByTestId("cartValue");
-    const itemCountInput = getByTestId("numberOfItems");
-    const distanceInput = getByTestId("deliveryDistance");
+    const cartValueInput = getByTestId("cartValue") as HTMLInputElement;
+    const itemCountInput = getByTestId("numberOfItems") as HTMLInputElement;
+    const distanceInput = getByTestId("deliveryDistance") as HTMLInputElement;
 
     fireEvent.change(cartValueInput, { target: { value: "50" } });
     fireEvent.change(itemCountInput, { target: { value: "5" } });
@@ -40,6 +40,32 @@ describe("Fee calculation", () => {
 
     expect(fee).toBe(2.5);
     expect(feeNode).toHaveTextContent(fee!.toString());
+  });
+
+  it("Inputs have correct types", () => {
+    const { getByTestId } = render(<Calculator />);
+
+    const cartValueInput = getByTestId("cartValue") as HTMLInputElement;
+    const itemCountInput = getByTestId("numberOfItems") as HTMLInputElement;
+    const distanceInput = getByTestId("deliveryDistance") as HTMLInputElement;
+
+    fireEvent.change(cartValueInput, { target: { value: "1.50" } });
+    fireEvent.change(itemCountInput, { target: { value: "5" } });
+    fireEvent.change(distanceInput, { target: { value: "1000" } });
+
+    expect(cartValueInput.value).toBe("1.50");
+    expect(itemCountInput.value).toBe("5");
+    expect(distanceInput.value).toBe("1000");
+
+    //Integers
+    fireEvent.change(itemCountInput, { target: { value: "5.4" } });
+    fireEvent.change(distanceInput, { target: { value: "1000.5" } });
+    expect(itemCountInput.value).toBe("5");
+    expect(distanceInput.value).toBe("1000");
+
+    //Floats
+    fireEvent.change(cartValueInput, { target: { value: "1.50" } });
+    expect(cartValueInput.value).toBe("1.50");
   });
 
   it("Is keyboard accessible", async () => {

@@ -7,12 +7,6 @@ import App from "../../App.tsx";
 expect.extend(matchers);
 
 describe("App", () => {
-  it("Renders the app correctly", () => {
-    const { getByTestId } = render(<App />);
-
-    expect(true).toBe(true);
-  });
-
   it("Skip link works", async () => {
     const { getByTestId } = render(<App />);
 

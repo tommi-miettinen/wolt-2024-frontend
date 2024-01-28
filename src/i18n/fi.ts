@@ -1,13 +1,14 @@
 const fi = {
   calculateCostOfDelivery: "Laske toimituksen hinta",
   cartValue: "Korin arvo",
-  deliveryDistance: "Toimitusmatka",
+  deliveryDistance: "Toimitusmatka (metreinä)",
   numberOfItems: "Tuotteiden lukumäärä",
-  orderDate: "Tilauksen päivämäärä",
+  orderDate: "Tilauksen ajankohta",
   costOfDelivery: "Toimituksen hinta",
   cartValuePlaceholder: "Paljonko tuotteesi maksavat?",
   numberOfItemsPlaceholder: "Montako tuotetta korissasi on?",
   deliveryDistancePlaceholder: "Kuinka kaukana ravintolasta olet?",
+  costOfDeliveryIncompleteInput: "Täytä kaikki kentät nähdäksesi kuljetuksen hinnan",
 };
 
 export default fi;

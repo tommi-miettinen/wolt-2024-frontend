@@ -1,14 +1,16 @@
 import { useState, ChangeEvent } from "react";
 
-interface NumberInputProps {
+type CustomInputElement = Omit<JSX.IntrinsicElements["input"], "onChange">;
+
+interface NumberInputProps extends CustomInputElement {
   value: number;
   onChange: (value: number) => void;
+  minValue?: number;
   maxValue?: number;
   isInteger?: boolean;
-  [key: string]: any;
 }
 
-const NumberInput = ({ value = 0, onChange, isInteger, maxValue, ...rest }: NumberInputProps) => {
+const NumberInput = ({ value = 0, onChange, isInteger, maxValue, minValue = 1, ...rest }: NumberInputProps) => {
   const [inputValue, setInputValue] = useState<string>("");
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -18,6 +20,8 @@ const NumberInput = ({ value = 0, onChange, isInteger, maxValue, ...rest }: Numb
     if (!regex.test(newValue) && newValue !== "") return;
 
     if (maxValue && parseFloat(newValue) > maxValue) return;
+
+    if (minValue && parseFloat(newValue) < minValue) return;
 
     setInputValue(newValue);
     onChange(isInteger ? parseInt(newValue) : parseFloat(newValue));

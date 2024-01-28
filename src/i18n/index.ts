@@ -13,6 +13,7 @@ export enum TranslationKeys {
   CART_VALUE_PLACEHOLDER = "cartValuePlaceholder",
   NUMBER_OF_ITEMS_PLACEHOLDER = "numberOfItemsPlaceholder",
   DELIVERY_DISTANCE_PLACEHOLDER = "deliveryDistancePlaceholder",
+  COST_OF_DELIVERY_INCOMPLETE_INPUT = "costOfDeliveryIncompleteInput",
 }
 
 i18n.use(initReactI18next).init({

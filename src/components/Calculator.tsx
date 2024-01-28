@@ -1,8 +1,31 @@
-import { useEffect, useState } from "react";
-import { deliveryFeeWithHooks } from "../services/feeCalculationService";
+import { HTMLAttributes, useEffect, useState } from "react";
+import { getDeliveryFee } from "../services/feeCalculationService/internal";
 import NumberInput from "./NumberInput";
 import { useTranslation } from "react-i18next";
 import { TranslationKeys } from "../i18n";
+
+interface FeeDisplayProps extends HTMLAttributes<HTMLDivElement> {
+  deliveryFee: number;
+  isValidInput: boolean;
+}
+
+const FeeDisplay = ({ deliveryFee, isValidInput, ...rest }: FeeDisplayProps) => {
+  const { t } = useTranslation();
+  return (
+    <div {...rest}>
+      {isValidInput ? (
+        <>
+          <span>{t(TranslationKeys.COST_OF_DELIVERY)} </span>
+          <span data-testid="fee" className="font-semibold">
+            {deliveryFee.toFixed(2)}€
+          </span>
+        </>
+      ) : (
+        <span>{t(TranslationKeys.COST_OF_DELIVERY_INCOMPLETE_INPUT)}</span>
+      )}
+    </div>
+  );
+};
 
 const Calculator = () => {
   const [datetime, setDatetime] = useState(new Date().toISOString().slice(0, 16));
@@ -10,34 +33,36 @@ const Calculator = () => {
   const [cartValue, setCartValue] = useState(0);
   const [distance, setDistance] = useState(0);
   const [itemCount, setItemCount] = useState(0);
+  const [isValidInput, setIsValidInput] = useState(false);
 
   const { t } = useTranslation();
 
   useEffect(() => {
-    deliveryFeeWithHooks(
-      {
-        distance,
-        cartValue,
-        itemCount,
-        date: new Date(datetime),
-      },
-      {
-        onSuccess: (fee) => setDeliveryFee(fee),
-        onError: () => setDeliveryFee(0),
-      }
-    );
+    handleDeliveryFee();
   }, [cartValue, distance, itemCount, datetime]);
+
+  const handleDeliveryFee = () => {
+    try {
+      const fee = getDeliveryFee({ distance, cartValue, itemCount, date: new Date(datetime) });
+      setDeliveryFee(fee);
+      setIsValidInput(true);
+    } catch {
+      setDeliveryFee(0);
+      setIsValidInput(false);
+    }
+  };
 
   return (
     <div tabIndex={-1} data-testid="calculator" className="flex flex-col gap-4 text-primary">
       <div className="flex flex-col">
-        <label className="cursor-pointer py-1" htmlFor="cart-value">
+        <label className="cursor-pointer py-1" htmlFor="cartValue">
           {t("cartValue")}
         </label>
         <NumberInput
-          id="cart-value"
+          id="cartValue"
           data-testid="cartValue"
           placeholder={t(TranslationKeys.CART_VALUE_PLACEHOLDER)}
+          minValue={0}
           maxValue={100000}
           className={inputStyle}
           value={cartValue}
@@ -45,12 +70,13 @@ const Calculator = () => {
         />
       </div>
       <div className="flex flex-col">
-        <label className="cursor-pointer py-1" htmlFor="item-count">
+        <label className="cursor-pointer py-1" htmlFor="numberOfItems">
           {t(TranslationKeys.NUMBER_OF_ITEMS)}
         </label>
         <NumberInput
-          id="item-count"
+          id="numberOfItems"
           isInteger
+          minValue={1}
           maxValue={100000}
           placeholder={t(TranslationKeys.NUMBER_OF_ITEMS_PLACEHOLDER)}
           data-testid="numberOfItems"
@@ -60,14 +86,15 @@ const Calculator = () => {
         />
       </div>
       <div className="flex flex-col">
-        <label className="cursor-pointer  py-1" htmlFor="distance">
+        <label className="cursor-pointer  py-1" htmlFor="deliveryDistance">
           {t(TranslationKeys.DELIVERY_DISTANCE)}
         </label>
         <NumberInput
-          id="distance"
+          id="deliveryDistance"
           placeholder={t(TranslationKeys.DELIVERY_DISTANCE_PLACEHOLDER)}
           isInteger
           data-testid="deliveryDistance"
+          minValue={1}
           maxValue={1000000}
           className={inputStyle}
           value={distance}
@@ -80,12 +107,7 @@ const Calculator = () => {
         </label>
         <input className={inputStyle} id="date" value={datetime} onChange={(e) => setDatetime(e.target.value)} type="datetime-local" />
       </div>
-      <div aria-live="polite" className="mt-4">
-        <span>{t(TranslationKeys.COST_OF_DELIVERY)} </span>
-        <span data-testid="fee" className="font-semibold">
-          {deliveryFee.toFixed(2)}€
-        </span>
-      </div>
+      <FeeDisplay aria-live="polite" className="mt-4" isValidInput={isValidInput} deliveryFee={deliveryFee} />
     </div>
   );
 };

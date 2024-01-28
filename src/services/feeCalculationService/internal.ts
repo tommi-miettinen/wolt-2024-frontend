@@ -1,4 +1,5 @@
-import { z, ZodError } from "zod";
+import { z } from "zod";
+import { DeliveryFeeInput } from "./types";
 
 export const FREE_CART_THRESHOLD = 200;
 export const MAX_FEE = 15;
@@ -31,13 +32,9 @@ export enum BulkItems {
   TIER_2_FEE = 1.2,
 }
 
-export interface DeliveryFeeInput {
-  distance: number;
-  cartValue: number;
-  itemCount: number;
-  date: Date;
-}
-
+/**
+ * @throws {ZodError} On invalid dates.
+ */
 export const isRushHour = (date: Date) => {
   z.date().parse(date);
   const day = date.getDay();
@@ -45,9 +42,14 @@ export const isRushHour = (date: Date) => {
   return hour >= RushHour.START && hour < RushHour.END && day === RushHour.DAY;
 };
 
-const getSmallOrderSurcharge = (cartValue: number) => Math.max(0, SmallOrder.MIN_VALUE - cartValue);
+export const getSmallOrderSurcharge = (cartValue: number) => {
+  z.number().positive().parse(cartValue);
+  return +Math.max(0, SmallOrder.MIN_VALUE - cartValue).toFixed(2);
+};
 
-const getBulkFee = (itemCount: number) => {
+export const getBulkFee = (itemCount: number) => {
+  z.number().positive().parse(itemCount);
+
   let fee = 0;
 
   const itemsBeyondTier1 = Math.max(itemCount - BulkItems.TIER_1, 0);
@@ -60,7 +62,9 @@ const getBulkFee = (itemCount: number) => {
   return fee;
 };
 
-const getFeeByDistance = (distance: number) => {
+export const getFeeByDistance = (distance: number) => {
+  z.number().positive().parse(distance);
+
   if (distance <= Distances.BASE) return DistanceFees.BASE;
 
   const distanceBeyondBase = distance - Distances.BASE;
@@ -71,18 +75,19 @@ const getFeeByDistance = (distance: number) => {
 };
 
 /**
- * Uses the validateDeliveryFeeInput function to validate the input.
- * @throws {Error} Throws an error if the input validation fails.
+ * @throws {ZodError} Throws an error if the input does not conform to the following validation rules:
+ *                 - `distance`, `cartValue`, and `itemCount` must be positive numbers.
+ *                 - `date` must be a valid Date object.
  */
 export const getDeliveryFee = (deliveryFeeInput: DeliveryFeeInput) => {
-  const { distance, cartValue, itemCount, date } = deliveryFeeInput;
-
   z.object({
     distance: z.number().positive(),
     cartValue: z.number().positive(),
     itemCount: z.number().positive(),
     date: z.date(),
   }).parse(deliveryFeeInput);
+
+  const { distance, cartValue, itemCount, date } = deliveryFeeInput;
 
   let fee = 0;
 
@@ -97,28 +102,4 @@ export const getDeliveryFee = (deliveryFeeInput: DeliveryFeeInput) => {
   }
 
   return Math.min(MAX_FEE, fee);
-};
-
-type DeliveryFeeWithHooks = (
-  input: DeliveryFeeInput,
-  hooks: {
-    onSuccess?: (fee: number) => void;
-    onError?: (error: ZodError) => void;
-  }
-) => void;
-
-export const deliveryFeeWithHooks: DeliveryFeeWithHooks = (deliveryFeeInput, hooks) => {
-  const { onSuccess, onError } = hooks;
-  try {
-    onSuccess && onSuccess(getDeliveryFee(deliveryFeeInput));
-  } catch (e) {
-    onError && onError(e as ZodError);
-  }
-};
-
-export const internals = {
-  getSmallOrderSurcharge,
-  getBulkFee,
-  getFeeByDistance,
-  isRushHour,
 };
