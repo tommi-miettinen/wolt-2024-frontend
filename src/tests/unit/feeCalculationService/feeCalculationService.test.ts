@@ -5,7 +5,7 @@ import {
   getBulkFee,
   getDeliveryFee,
   isRushHour,
-  CART_VALUE_THRESHOLD_FOR_SURCHARGE,
+  CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE,
 } from "../../../services/feeCalculationService/internal";
 
 const NOT_RUSH_HOUR_DATE = new Date("2021-10-01T14:59");
@@ -132,14 +132,14 @@ describe("Total fee calculations", () => {
 describe(`During the Friday rush, 3 - 7 PM, the delivery fee (the total fee including possible surcharges) will be multiplied by 1.2x.
  However, the fee still cannot be more than the max (15€).`, () => {
   it("Fee cant still be over 15€", () => {
-    expect(getDeliveryFee({ distance: 10000, cartValue: CART_VALUE_THRESHOLD_FOR_SURCHARGE, itemCount: 100, date: RUSH_HOUR_DATE })).toBe(
-      15
-    );
+    expect(
+      getDeliveryFee({ distance: 10000, cartValue: CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE, itemCount: 100, date: RUSH_HOUR_DATE })
+    ).toBe(15);
   });
 
   it(`Cart value of 10€ (no small order surcharge) and a distance of 1 (2€ base fee applied)
      should result in 2€ basefee * 1.2 (rush hour multiplier) = 2.4€`, () => {
-    expect(getDeliveryFee({ distance: 1, cartValue: CART_VALUE_THRESHOLD_FOR_SURCHARGE, itemCount: 1, date: RUSH_HOUR_DATE })).toBe(2.4);
+    expect(getDeliveryFee({ distance: 1, cartValue: CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE, itemCount: 1, date: RUSH_HOUR_DATE })).toBe(2.4);
   });
 });
 

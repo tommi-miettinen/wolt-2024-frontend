@@ -10,7 +10,6 @@ const getStoredTheme = () => {
   if (storedTheme) {
     return storedTheme as Themes;
   }
-  return getPreferredTheme();
 };
 
 const getPreferredTheme = () => {
@@ -21,8 +20,17 @@ const getPreferredTheme = () => {
   }
 };
 
+const getStoredThemeOrDefault = () => {
+  const storedTheme = getStoredTheme();
+  if (storedTheme) {
+    return storedTheme;
+  } else {
+    return getPreferredTheme();
+  }
+};
+
 export const useTheme = () => {
-  const [theme, setTheme] = useState<Themes>(getStoredTheme());
+  const [theme, setTheme] = useState<Themes>(getStoredThemeOrDefault());
 
   const toggleTheme = () => {
     const newTheme = theme === Themes.LIGHT ? Themes.DARK : Themes.LIGHT;
@@ -32,7 +40,7 @@ export const useTheme = () => {
   };
 
   useEffect(() => {
-    const storedTheme = getStoredTheme();
+    const storedTheme = getStoredThemeOrDefault();
     document.documentElement.setAttribute("data-theme", storedTheme);
     setTheme(storedTheme);
   }, []);

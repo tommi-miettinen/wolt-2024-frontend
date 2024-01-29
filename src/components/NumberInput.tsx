@@ -1,28 +1,28 @@
 import { useState, ChangeEvent } from "react";
 
 interface NumberInputProps extends Omit<JSX.IntrinsicElements["input"], "onChange"> {
-  value: number;
   onChange: (value: number) => void;
-  minValue?: number;
-  maxValue?: number;
-  isInteger?: boolean;
+  minValue: number;
+  maxValue: number;
+  decimalPlaces?: number;
 }
 
-const NumberInput = ({ value = 0, onChange, isInteger, maxValue, minValue = 1, ...rest }: NumberInputProps) => {
+const NumberInput = ({ onChange, maxValue, minValue, decimalPlaces = 0, ...rest }: NumberInputProps) => {
   const [inputValue, setInputValue] = useState<string>("");
+
+  const isInteger = decimalPlaces === 0;
+  const regex = isInteger ? /^-?[0-9]*$/ : new RegExp(`^-?[0-9]*\.?[0-9]{0,${decimalPlaces}}$`);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    const regex = isInteger ? /^[0-9]*$/ : /^[0-9]*\.?[0-9]{0,2}$/;
 
     if (!regex.test(newValue) && newValue !== "") return;
-
-    if (maxValue && parseFloat(newValue) > maxValue) return;
-
-    if (minValue && parseFloat(newValue) < minValue) return;
+    if (minValue > 0 && newValue === "-") return;
+    if (parseFloat(newValue) > maxValue) return;
+    if (parseFloat(newValue) < minValue) return;
 
     setInputValue(newValue);
-    onChange(isInteger ? parseInt(newValue) : parseFloat(newValue));
+    onChange(+parseFloat(newValue).toFixed(decimalPlaces));
   };
 
   return <input {...rest} type="text" value={inputValue} onChange={handleInputChange} />;

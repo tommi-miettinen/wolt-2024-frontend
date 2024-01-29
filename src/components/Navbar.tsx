@@ -30,7 +30,7 @@ const Navbar = () => {
   const logo = theme === "light" ? woltlogoblack : woltlogowhite;
 
   return (
-    <div className="bg-body border-b border-border-color p-3.5 w-full flex items-center justify-center">
+    <div data-test-id="navbar" className="bg-body border-b border-border-color p-3.5 w-full flex items-center justify-center">
       <div className="w-[1200px] flex items-center justify-between">
         <img src={logo} className="h-[32px] w-[80px]" alt="Wolt Logo" />
         <div className="flex gap-2">

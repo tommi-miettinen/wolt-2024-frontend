@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { DeliveryFeeInput } from "./types";
 
-export const CART_VALUE_THRESHOLD_FOR_SURCHARGE = 10;
+export const CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE = 10;
 export const MIN_CART_VALUE_FOR_FREE_DELIVERY = 200;
 
 export const MAX_DELIVERY_FEE = 15;
@@ -32,20 +32,16 @@ export const isRushHour = (date: Date) => {
 };
 
 /**
- * Meant for internal use only.
- * @throws {ZodError} Throws an error if the input does not conform to the following validation rules:
- *                - `cartValue` must be a positive number.
+ * @throws {ZodError} On nonpositive numbers or otherwise invalid inputs
  **/
 export const getSmallOrderSurcharge = (cartValue: number) => {
   z.number().positive().parse(cartValue);
-  return +Math.max(0, CART_VALUE_THRESHOLD_FOR_SURCHARGE - cartValue).toFixed(2);
+  return +Math.max(0, CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE - cartValue).toFixed(2);
 };
 
 /**
- * Meant for internal use only.
- * @throws {ZodError} Throws an error if the input does not conform to the following validation rules:
- *                 - `itemCount` must be a positive number.
- */
+ * @throws {ZodError} On nonpositive numbers or otherwise invalid inputs
+ **/
 export const getBulkFee = (itemCount: number) => {
   z.number().positive().parse(itemCount);
 
@@ -64,9 +60,7 @@ export const getBulkFee = (itemCount: number) => {
 };
 
 /**
- * Meant for internal use only.
- * @throws {ZodError} Throws an error if the input does not conform to the following validation rules:
- *                 - `distance` must be a positive number.
+ * @throws {ZodError} On nonpositive numbers or otherwise invalid inputs
  */
 export const getFeeByDistance = (distance: number) => {
   z.number().positive().parse(distance);

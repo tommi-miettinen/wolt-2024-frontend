@@ -6,10 +6,23 @@ import * as matchers from "@testing-library/jest-dom/matchers";
 import App from "../../App.tsx";
 
 configure({ testIdAttribute: "data-test-id" });
-
 expect.extend(matchers);
 
 describe("App", () => {
+  it("App renders correctly", () => {
+    const { getByTestId } = render(<App />);
+
+    const calculator = getByTestId("calculator");
+    const main = document.querySelector("main") as HTMLElement;
+    const navbar = getByTestId("navbar");
+    const skipLink = getByTestId("skipLink");
+
+    expect(navbar).toBeInTheDocument();
+    expect(calculator).toBeInTheDocument();
+    expect(skipLink).toBeInTheDocument();
+    expect(main).toBeInTheDocument();
+  });
+
   it("Skip link works", async () => {
     const { getByTestId } = render(<App />);
 

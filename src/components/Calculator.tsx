@@ -62,7 +62,8 @@ const Calculator = () => {
           id="cartValue"
           data-test-id="cartValue"
           placeholder={t(TranslationKeys.CART_VALUE_PLACEHOLDER)}
-          minValue={0}
+          decimalPlaces={2}
+          minValue={1}
           maxValue={100000}
           className={inputStyle}
           value={cartValue}
@@ -75,7 +76,6 @@ const Calculator = () => {
         </label>
         <NumberInput
           id="numberOfItems"
-          isInteger
           minValue={1}
           maxValue={100000}
           placeholder={t(TranslationKeys.NUMBER_OF_ITEMS_PLACEHOLDER)}
@@ -92,7 +92,6 @@ const Calculator = () => {
         <NumberInput
           id="deliveryDistance"
           placeholder={t(TranslationKeys.DELIVERY_DISTANCE_PLACEHOLDER)}
-          isInteger
           data-test-id="deliveryDistance"
           minValue={1}
           maxValue={1000000}
