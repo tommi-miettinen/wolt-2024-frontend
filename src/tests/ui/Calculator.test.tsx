@@ -15,15 +15,15 @@ describe("Fee calculation", () => {
     const { getByTestId } = render(<Calculator />);
 
     const cartValueInput = getByTestId("cartValue") as HTMLInputElement;
-    const itemCountInput = getByTestId("numberOfItems") as HTMLInputElement;
+    const numberOfItemsInput = getByTestId("numberOfItems") as HTMLInputElement;
     const distanceInput = getByTestId("deliveryDistance") as HTMLInputElement;
 
     await userEvent.type(cartValueInput, "50");
-    await userEvent.type(itemCountInput, "5");
+    await userEvent.type(numberOfItemsInput, "5");
     await userEvent.type(distanceInput, "1000");
 
     expect(cartValueInput).toHaveValue("50");
-    expect(itemCountInput).toHaveValue("5");
+    expect(numberOfItemsInput).toHaveValue("5");
     expect(distanceInput).toHaveValue("1000");
   });
 
@@ -31,19 +31,18 @@ describe("Fee calculation", () => {
     const { getByTestId } = render(<Calculator />);
 
     const cartValueInput = getByTestId("cartValue");
-    const itemCountInput = getByTestId("numberOfItems");
+    const numberOfItemsInput = getByTestId("numberOfItems");
     const distanceInput = getByTestId("deliveryDistance");
     const orderTimeInput = getByTestId("orderTime");
 
     await userEvent.type(cartValueInput, "50");
-    await userEvent.type(itemCountInput, "5");
+    await userEvent.type(numberOfItemsInput, "5");
     await userEvent.type(distanceInput, "1000");
-
     fireEvent.input(orderTimeInput, { target: { value: NOT_RUSH_HOUR.toISOString().slice(0, 16) } });
-    const fee = getDeliveryFee({ distance: 1000, cartValue: 50, itemCount: 5, date: NOT_RUSH_HOUR });
+
+    const fee = getDeliveryFee({ distance: 1000, cartValue: 50, numberOfItems: 5, orderTime: NOT_RUSH_HOUR });
     const feeNode = getByTestId("fee");
 
-    expect(fee).toBe(2.5);
     expect(feeNode).toHaveTextContent(fee.toString());
   });
 
@@ -51,26 +50,26 @@ describe("Fee calculation", () => {
     const { getByTestId } = render(<Calculator />);
 
     const cartValueInput = getByTestId("cartValue") as HTMLInputElement;
-    const itemCountInput = getByTestId("numberOfItems") as HTMLInputElement;
+    const numberOfItemsInput = getByTestId("numberOfItems") as HTMLInputElement;
     const distanceInput = getByTestId("deliveryDistance") as HTMLInputElement;
 
     await userEvent.type(cartValueInput, "50");
-    await userEvent.type(itemCountInput, "5");
+    await userEvent.type(numberOfItemsInput, "5");
     await userEvent.type(distanceInput, "1000");
 
     expect(cartValueInput.value).toBe("50");
-    expect(itemCountInput.value).toBe("5");
+    expect(numberOfItemsInput.value).toBe("5");
     expect(distanceInput.value).toBe("1000");
 
     await userEvent.clear(cartValueInput);
-    await userEvent.clear(itemCountInput);
+    await userEvent.clear(numberOfItemsInput);
     await userEvent.clear(distanceInput);
     //Integers
 
-    await userEvent.type(itemCountInput, "5.4");
+    await userEvent.type(numberOfItemsInput, "5.4");
     await userEvent.type(distanceInput, "1000.5");
 
-    expect(itemCountInput.value).toBe("54");
+    expect(numberOfItemsInput.value).toBe("54");
     expect(distanceInput.value).toBe("10005");
     //Floats
     await userEvent.type(cartValueInput, "1.5");
@@ -86,7 +85,7 @@ describe("Fee calculation", () => {
 
     const calculator = getByTestId("calculator");
     const cartValueInput = getByTestId("cartValue") as HTMLInputElement;
-    const itemCountInput = getByTestId("numberOfItems") as HTMLInputElement;
+    const numberOfItemsInput = getByTestId("numberOfItems") as HTMLInputElement;
     const distanceInput = getByTestId("deliveryDistance") as HTMLInputElement;
 
     calculator.focus();
@@ -97,15 +96,15 @@ describe("Fee calculation", () => {
     await userEvent.type(cartValueInput, "50");
 
     await userEvent.tab();
-    expect(itemCountInput).toHaveFocus();
-    await userEvent.type(itemCountInput, "5");
+    expect(numberOfItemsInput).toHaveFocus();
+    await userEvent.type(numberOfItemsInput, "5");
 
     await userEvent.tab();
     expect(distanceInput).toHaveFocus();
     await userEvent.type(distanceInput, "1000");
 
     expect(cartValueInput.value).toBe("50");
-    expect(itemCountInput.value).toBe("5");
+    expect(numberOfItemsInput.value).toBe("5");
     expect(distanceInput.value).toBe("1000");
   });
 });

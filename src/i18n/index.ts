@@ -15,6 +15,7 @@ export enum TranslationKeys {
   DELIVERY_DISTANCE_PLACEHOLDER = "deliveryDistancePlaceholder",
   COST_OF_DELIVERY_INCOMPLETE_INPUT = "costOfDeliveryIncompleteInput",
   SKIP_TO_MAIN_CONTENT = "skipToMainContent",
+  DARK_THEME = "darkTheme",
 }
 
 export type Translations = {

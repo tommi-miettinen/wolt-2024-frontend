@@ -7,6 +7,101 @@
   src: url("./assets/fonts/Omnes Bold.otf") format("opentype");
 }
 
+.swap-bg {
+  animation: swapBg 20s ease-in-out alternate infinite;
+}
+
+@keyframes swapBg {
+  0% {
+    opacity: 1;
+    background-color: #f0ecf4;
+    background-image: url("./assets/images/woltbg.jpg");
+    background-color: #f0ecf4;
+  }
+  40% {
+    opacity: 1;
+    background-image: url("./assets/images/woltbg.jpg");
+    background-color: #f0ecf4;
+  }
+  45% {
+    opacity: 1;
+  }
+  49% {
+    background-image: url("./assets/images/woltbg.jpg");
+    background-color: #f0ecf4;
+  }
+
+  50% {
+    opacity: 0;
+    background-image: url("./assets/images/woltbg2.jpg");
+    background-color: white;
+  }
+  51% {
+    background-image: url("./assets/images/woltbg2.jpg");
+    background-color: #e9b8aa;
+  }
+  55% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+    background-image: url("./assets/images/woltbg2.jpg");
+    background-color: #e9b8aa;
+  }
+  100% {
+    opacity: 1;
+    background-image: url("./assets/images/woltbg2.jpg");
+    background-color: #e9b8aa;
+  }
+}
+
 * {
   @apply transition-colors duration-500;
+}
+
+label {
+  @apply cursor-pointer;
+}
+
+[data-theme="light"] * {
+  @apply text-black;
+}
+
+[data-theme="dark"] * {
+  @apply text-white;
+}
+
+[data-theme="light"] *:focus {
+  @apply ring-sky-500 ring-offset-0;
+}
+
+[data-theme="dark"] *:focus {
+  @apply ring-sky-500 ring-offset-0;
+}
+
+[data-theme="dark"] input {
+  @apply outline-offset-0 bg-transparent border outline-none border-gray-700 w-full p-2 rounded-lg;
+  @apply focus:ring focus:ring-sky-500 focus:ring-offset-0;
+  @apply hover:outline hover:outline-sky-300;
+}
+
+[data-theme="light"] input {
+  @apply outline-offset-0 bg-transparent border outline-none border-gray-300 w-full p-2 rounded-lg ring-white;
+  @apply hover:outline hover:outline-sky-100;
+}
+
+button {
+  @apply outline-none focus:outline-none px-5 py-2 rounded-lg border;
+  @apply focus:ring-offset-0;
+}
+
+[data-theme="light"] button {
+  @apply text-gray-700 border-gray-300;
+  @apply focus:ring focus:ring-sky-600 focus:ring-offset-0 focus:border-transparent;
+}
+
+[data-theme="dark"] button {
+  @apply bg-transparent;
+  @apply text-white border border-gray-700;
+  @apply focus:ring focus:ring-sky-500 focus:ring-offset-0;
 }

@@ -112,20 +112,20 @@ describe(`If the number of items is five or more, an additional 50 cent surcharg
 
 describe("Total fee calculations", () => {
   it("The delivery fee can never be more than 15€, including possible surcharges.", () => {
-    expect(getDeliveryFee({ distance: 100000, cartValue: 1, itemCount: 1, date: NOT_RUSH_HOUR_DATE })).toBe(15);
+    expect(getDeliveryFee({ distance: 100000, cartValue: 1, numberOfItems: 1, orderTime: NOT_RUSH_HOUR_DATE })).toBe(15);
   });
 
   it("The delivery is free (0€) when the cart value is equal or more than 200€.", () => {
-    expect(getDeliveryFee({ distance: 1, cartValue: 200, itemCount: 1, date: NOT_RUSH_HOUR_DATE })).toBe(0);
-    expect(getDeliveryFee({ distance: 1, cartValue: 200.01, itemCount: 1, date: NOT_RUSH_HOUR_DATE })).toBe(0);
-    expect(getDeliveryFee({ distance: 1, cartValue: 199.99, itemCount: 1, date: NOT_RUSH_HOUR_DATE })).toBe(2);
+    expect(getDeliveryFee({ distance: 1, cartValue: 200, numberOfItems: 1, orderTime: NOT_RUSH_HOUR_DATE })).toBe(0);
+    expect(getDeliveryFee({ distance: 1, cartValue: 200.01, numberOfItems: 1, orderTime: NOT_RUSH_HOUR_DATE })).toBe(0);
+    expect(getDeliveryFee({ distance: 1, cartValue: 199.99, numberOfItems: 1, orderTime: NOT_RUSH_HOUR_DATE })).toBe(2);
   });
 
   it("Throws on invalid inputs", () => {
-    expect(() => getDeliveryFee({ distance: 0, cartValue: 0, itemCount: 0, date: NOT_RUSH_HOUR_DATE })).toThrow();
-    expect(() => getDeliveryFee({ distance: -1, cartValue: -1, itemCount: -1, date: NOT_RUSH_HOUR_DATE })).toThrow();
+    expect(() => getDeliveryFee({ distance: 0, cartValue: 0, numberOfItems: 0, orderTime: NOT_RUSH_HOUR_DATE })).toThrow();
+    expect(() => getDeliveryFee({ distance: -1, cartValue: -1, numberOfItems: -1, orderTime: NOT_RUSH_HOUR_DATE })).toThrow();
     // @ts-expect-error expecting error on invalid input
-    expect(() => getDeliveryFee({ distance: "1", cartValue: "1", itemCount: "1", date: new Date("invalid date") })).toThrow();
+    expect(() => getDeliveryFee({ distance: "1", cartValue: "1", numberOfItems: "1", date: new Date("invalid date") })).toThrow();
   });
 });
 
@@ -133,13 +133,15 @@ describe(`During the Friday rush, 3 - 7 PM, the delivery fee (the total fee incl
  However, the fee still cannot be more than the max (15€).`, () => {
   it("Fee cant still be over 15€", () => {
     expect(
-      getDeliveryFee({ distance: 10000, cartValue: CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE, itemCount: 100, date: RUSH_HOUR_DATE })
+      getDeliveryFee({ distance: 10000, cartValue: CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE, numberOfItems: 100, orderTime: RUSH_HOUR_DATE })
     ).toBe(15);
   });
 
   it(`Cart value of 10€ (no small order surcharge) and a distance of 1 (2€ base fee applied)
      should result in 2€ basefee * 1.2 (rush hour multiplier) = 2.4€`, () => {
-    expect(getDeliveryFee({ distance: 1, cartValue: CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE, itemCount: 1, date: RUSH_HOUR_DATE })).toBe(2.4);
+    expect(
+      getDeliveryFee({ distance: 1, cartValue: CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE, numberOfItems: 1, orderTime: RUSH_HOUR_DATE })
+    ).toBe(2.4);
   });
 });
 

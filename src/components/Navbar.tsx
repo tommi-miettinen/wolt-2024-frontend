@@ -23,7 +23,7 @@ export const SkipLink = () => {
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const changeLanguage = () => {
     i18n.language === "en" ? i18n.changeLanguage("fi") : i18n.changeLanguage("en");
@@ -33,14 +33,13 @@ const Navbar = () => {
   const logo = theme === "light" ? woltlogoblack : woltlogowhite;
 
   return (
-    <div data-test-id="navbar" className="bg-body border-b border-border-color p-3.5 w-full flex items-center justify-center">
+    <div data-test-id="navbar" className="bg-body p-3.5 w-full flex items-center justify-center">
       <div className="w-[1200px] flex items-center justify-between">
         <img src={logo} className="h-[32px] w-[80px]" alt="Wolt Logo" />
         <div className="flex gap-2">
           <button
             data-test-id="languageSwitch"
             aria-label={i18n.language === "en" ? "Switch to Finnish" : "Switch to English"}
-            className={buttonStyle}
             onClick={changeLanguage}
           >
             {i18n.language === "en" ? "Suomeksi" : "In English"}
@@ -55,7 +54,7 @@ const Navbar = () => {
                 checked={theme === "dark"}
               />
               <div className={switchStyle} />
-              <span className="text-primary font-medium">Tumma teema</span>
+              <span>{t(TranslationKeys.DARK_THEME)}</span>
             </label>
           </div>
         </div>
@@ -65,10 +64,6 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-const buttonStyle = `py-2 px-2 sm:px-5 text-primary border border-border-color
-focus:outline focus:border-sky-500 focus:outline-sky-500
-hover :duration-500 hover:shadow hover:text-sky-400 rounded-lg`;
 
 const switchStyle = `w-11 h-6 bg-gray-200 rounded-full 
                      peer-checked:bg-blue-600

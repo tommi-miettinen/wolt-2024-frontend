@@ -12,6 +12,7 @@ const en: Translations = {
   deliveryDistancePlaceholder: "How far are you from the restaurant?",
   costOfDeliveryIncompleteInput: "Fill in the information to see the cost of delivery",
   skipToMainContent: "Skip to main content",
+  darkTheme: "Dark theme",
 };
 
 export default en;

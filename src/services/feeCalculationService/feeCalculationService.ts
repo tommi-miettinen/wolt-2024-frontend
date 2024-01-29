@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { DeliveryFeeInput } from "./types";
 
 export const CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE = 10;
 export const MIN_CART_VALUE_FOR_FREE_DELIVERY = 200;
@@ -85,6 +84,13 @@ export const getFeeByDistance = (distance: number) => {
 
   return +(INITIAL_DELIVERY_FEE + additionalFee).toFixed(2);
 };
+
+export interface DeliveryFeeInput {
+  distance: number;
+  cartValue: number;
+  numberOfItems: number;
+  orderTime: Date;
+}
 
 /**
  * @param deliveryFeeInput

@@ -1,4 +1,4 @@
-import colors from "tailwindcss/colors";
+import colors, { sky } from "tailwindcss/colors";
 import { createThemes } from "tw-colors";
 
 /** @type {import('tailwindcss').Config} */
@@ -18,21 +18,19 @@ export default {
     createThemes({
       light: {
         body: colors.white,
-        "body-accent": colors.purple[50],
-        "body-1": colors.purple[100],
         primary: colors.black,
         "text-primary": colors.black,
         "text-primary-inverse": colors.white,
+        "outline-color": colors.sky[500],
         "border-color": colors.gray[300],
       },
       dark: {
         body: colors.black,
-        "body-accent": colors.gray[950],
-        "body-1": "#1E1E1E",
         primary: colors.white,
         "text-primary": colors.white,
         "text-primary-inverse": colors.black,
-        "border-color": colors.gray[700],
+        "outline-color": colors.sky,
+        "border-color": colors.gray[600],
       },
     }),
   ],

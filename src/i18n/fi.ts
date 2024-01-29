@@ -12,6 +12,7 @@ const fi: Translations = {
   deliveryDistancePlaceholder: "Kuinka kaukana ravintolasta olet?",
   costOfDeliveryIncompleteInput: "Täytä kaikki kentät nähdäksesi kuljetuksen hinnan",
   skipToMainContent: "Siirry pääsisältöön",
+  darkTheme: "Tumma teema",
 };
 
 export default fi;

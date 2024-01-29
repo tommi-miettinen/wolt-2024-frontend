@@ -16,8 +16,14 @@ const NumberInput = ({ onChange, maxValue, minValue, decimalPlaces = 0, ...rest 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
 
-    if (!regex.test(newValue) && newValue !== "") return;
-    if (minValue > 0 && newValue === "-") return;
+    if (!regex.test(newValue)) return;
+    if (newValue === "") {
+      setInputValue("");
+      onChange(0);
+      return;
+    }
+    if (newValue[0] === ".") return;
+    if (minValue >= 0 && newValue[0] === "-") return;
     if (parseFloat(newValue) > maxValue) return;
     if (parseFloat(newValue) < minValue) return;
 

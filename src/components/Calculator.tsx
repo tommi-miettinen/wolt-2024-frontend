@@ -28,11 +28,11 @@ const FeeDisplay = ({ deliveryFee, isValidInput, ...rest }: FeeDisplayProps) => 
 };
 
 const Calculator = () => {
-  const [datetime, setDatetime] = useState(new Date().toISOString().slice(0, 16));
+  const [orderTime, setorderTime] = useState(new Date().toISOString().slice(0, 16));
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [cartValue, setCartValue] = useState(0);
   const [distance, setDistance] = useState(0);
-  const [itemCount, setItemCount] = useState(0);
+  const [numberOfItems, setnumberOfItems] = useState(0);
   const [isValidInput, setIsValidInput] = useState(false);
 
   const { t } = useTranslation();
@@ -40,7 +40,7 @@ const Calculator = () => {
   useEffect(() => {
     const handleDeliveryFee = () => {
       try {
-        const fee = getDeliveryFee({ distance, cartValue, itemCount, date: new Date(datetime) });
+        const fee = getDeliveryFee({ distance, cartValue, numberOfItems, orderTime: new Date(orderTime) });
         setDeliveryFee(fee);
         setIsValidInput(true);
       } catch {
@@ -49,12 +49,12 @@ const Calculator = () => {
       }
     };
     handleDeliveryFee();
-  }, [cartValue, distance, itemCount, datetime]);
+  }, [cartValue, distance, numberOfItems, orderTime]);
 
   return (
     <div tabIndex={-1} data-test-id="calculator" className="flex flex-col gap-4 text-primary">
       <div>
-        <label className="cursor-pointer py-1 block" htmlFor="cartValue">
+        <label className="py-1 block" htmlFor="cartValue">
           {t("cartValue")}
         </label>
         <NumberInput
@@ -64,13 +64,11 @@ const Calculator = () => {
           decimalPlaces={2}
           minValue={1}
           maxValue={100000}
-          className={inputStyle}
-          value={cartValue}
           onChange={(value) => setCartValue(value)}
         />
       </div>
       <div>
-        <label className="cursor-pointer py-1 block" htmlFor="numberOfItems">
+        <label className="py-1 block" htmlFor="numberOfItems">
           {t(TranslationKeys.NUMBER_OF_ITEMS)}
         </label>
         <NumberInput
@@ -79,13 +77,11 @@ const Calculator = () => {
           maxValue={100000}
           placeholder={t(TranslationKeys.NUMBER_OF_ITEMS_PLACEHOLDER)}
           data-test-id="numberOfItems"
-          className={inputStyle}
-          value={itemCount}
-          onChange={(value) => setItemCount(value)}
+          onChange={(value) => setnumberOfItems(value)}
         />
       </div>
       <div>
-        <label className="cursor-pointer py-1 block" htmlFor="deliveryDistance">
+        <label className="py-1 block" htmlFor="deliveryDistance">
           {t(TranslationKeys.DELIVERY_DISTANCE)}
         </label>
         <NumberInput
@@ -94,21 +90,18 @@ const Calculator = () => {
           data-test-id="deliveryDistance"
           minValue={1}
           maxValue={1000000}
-          className={inputStyle}
-          value={distance}
           onChange={(value) => setDistance(value)}
         />
       </div>
       <div className="flex flex-col">
-        <label className="cursor-pointer py-1" htmlFor="orderTime">
+        <label className="py-1" htmlFor="orderTime">
           {t(TranslationKeys.ORDER_DATE)}
         </label>
         <input
           data-test-id="orderTime"
-          className={inputStyle}
           id="orderTime"
-          value={datetime}
-          onChange={(e) => setDatetime(e.target.value)}
+          value={orderTime}
+          onChange={(e) => setorderTime(e.target.value)}
           type="datetime-local"
         />
       </div>
@@ -118,10 +111,3 @@ const Calculator = () => {
 };
 
 export default Calculator;
-
-const inputStyle = `
-border border-border-color w-full
-focus:outline focus:border-sky-500 focus:outline-sky-500 
-bg-transparent p-2 rounded-lg
-hover:border-sky-300 hover:outline hover:outline-sky-300
-`;

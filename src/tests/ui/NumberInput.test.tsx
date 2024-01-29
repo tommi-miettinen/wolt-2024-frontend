@@ -28,9 +28,11 @@ describe("NumberInput", () => {
     expect(value).toBe(30);
 
     await userEvent.clear(inp);
+
+    //the minus cant be typed in the input on min value >= 0
     await userEvent.type(inp, "-50");
-    expect(inp).toHaveValue("0");
-    expect(value).toBe(0);
+    expect(inp).toHaveValue("50");
+    expect(value).toBe(50);
 
     await userEvent.clear(inp);
     await userEvent.type(inp, "2000.01");
@@ -56,6 +58,52 @@ describe("NumberInput", () => {
     await userEvent.type(inp, "20000");
     expect(inp).toHaveValue("2000");
     expect(value).toBe(2000);
+  });
+
+  it("Copy pasting invalid values doesnt change the input", async () => {
+    let value = 0;
+    const { getByTestId } = render(
+      <NumberInput
+        data-test-id="copy"
+        decimalPlaces={2}
+        minValue={0}
+        maxValue={2000.01}
+        onChange={(val) => {
+          value = val;
+        }}
+      />
+    );
+    const inp = getByTestId("copy");
+    inp.focus();
+    await userEvent.paste("abc");
+    expect(inp).toHaveValue("");
+    expect(value).toBe(0);
+
+    await userEvent.paste("-100");
+    expect(inp).toHaveValue("");
+  });
+
+  it("copy pasting valid values changes the input", async () => {
+    let value = 0;
+    const { getByTestId } = render(
+      <NumberInput
+        data-test-id="copy"
+        decimalPlaces={2}
+        minValue={0}
+        maxValue={2000.01}
+        onChange={(val) => {
+          value = val;
+        }}
+      />
+    );
+    const inp = getByTestId("copy");
+    inp.focus();
+    await userEvent.paste("100");
+    expect(inp).toHaveValue("100");
+
+    await userEvent.clear(inp);
+    await userEvent.paste("100.1");
+    expect(inp).toHaveValue("100.1");
   });
 
   it("Handles integer input correctly.", async () => {
@@ -114,6 +162,28 @@ describe("NumberInput", () => {
     await userEvent.type(inp, "3.333");
     expect(inp).toHaveValue("3.333");
     expect(value).toBe(3.333);
+  });
+
+  it("Clearing the input sets the value to 0", async () => {
+    let value = 0;
+    const { getByTestId } = render(
+      <NumberInput
+        data-test-id="clear"
+        maxValue={2000}
+        minValue={0}
+        onChange={(val) => {
+          value = val;
+        }}
+      />
+    );
+    const inp = getByTestId("clear");
+    await userEvent.type(inp, "30");
+    expect(inp).toHaveValue("30");
+    expect(value).toBe(30);
+
+    await userEvent.clear(inp);
+    expect(inp).toHaveValue("");
+    expect(value).toBe(0);
   });
 
   it("Doesnt allow non numeric characters", async () => {
