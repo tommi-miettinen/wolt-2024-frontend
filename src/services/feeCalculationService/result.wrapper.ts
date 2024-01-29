@@ -8,7 +8,7 @@ interface Result<T, E> {
   success: boolean;
 }
 
-const ok = <T>(data: T): Result<T, any> => ({ data, success: true, error: null });
+const ok = <T, E>(data: T): Result<T, E> => ({ data, success: true, error: null });
 const err = <T, E extends Error>(error: E): Result<T, E> => ({ data: {} as T, success: false, error });
 
 export const getSmallOrderSurchargeWrapper = (cartValue: number): Result<number, ZodError> => {

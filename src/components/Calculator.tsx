@@ -38,19 +38,18 @@ const Calculator = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
+    const handleDeliveryFee = () => {
+      try {
+        const fee = getDeliveryFee({ distance, cartValue, itemCount, date: new Date(datetime) });
+        setDeliveryFee(fee);
+        setIsValidInput(true);
+      } catch {
+        setDeliveryFee(0);
+        setIsValidInput(false);
+      }
+    };
     handleDeliveryFee();
   }, [cartValue, distance, itemCount, datetime]);
-
-  const handleDeliveryFee = () => {
-    try {
-      const fee = getDeliveryFee({ distance, cartValue, itemCount, date: new Date(datetime) });
-      setDeliveryFee(fee);
-      setIsValidInput(true);
-    } catch {
-      setDeliveryFee(0);
-      setIsValidInput(false);
-    }
-  };
 
   return (
     <div tabIndex={-1} data-test-id="calculator" className="flex flex-col gap-4 text-primary">

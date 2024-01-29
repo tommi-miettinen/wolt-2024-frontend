@@ -10,15 +10,14 @@ export const SkipLink = () => {
   const { t } = useTranslation();
 
   return (
-    <a
-      tabIndex={0}
+    <button
       data-test-id="skipLink"
       onKeyDown={(e) => e.key === "Enter" && focusMainContent()}
       onClick={focusMainContent}
-      className="absolute left-[-999px] top-0 z-50 bg-white text-black p-2 focus:left-0 focus:opacity-100 focus:border-2 focus:border-sky-500"
+      className="absolute border-0 bg-white rounded-lg left-[-999px] top-2 z-50 text-black p-2 focus:left-2 focus:opacity-100 focus:outline focus:outline-sky-500"
     >
       {t(TranslationKeys.SKIP_TO_MAIN_CONTENT)}
-    </a>
+    </button>
   );
 };
 

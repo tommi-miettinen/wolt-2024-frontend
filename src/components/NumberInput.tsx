@@ -11,7 +11,7 @@ const NumberInput = ({ onChange, maxValue, minValue, decimalPlaces = 0, ...rest 
   const [inputValue, setInputValue] = useState<string>("");
 
   const isInteger = decimalPlaces === 0;
-  const regex = isInteger ? /^-?[0-9]*$/ : new RegExp(`^-?[0-9]*\.?[0-9]{0,${decimalPlaces}}$`);
+  const regex = isInteger ? /^-?[0-9]*$/ : new RegExp(`^-?[0-9]*\\.?[0-9]{0,${decimalPlaces}}$`);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;

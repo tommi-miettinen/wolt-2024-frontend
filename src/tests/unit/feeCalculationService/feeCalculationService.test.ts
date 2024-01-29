@@ -32,7 +32,7 @@ describe(`If the cart value is less than 10€, a small order surcharge is added
   it("Throws on invalid inputs", () => {
     expect(() => getSmallOrderSurcharge(0)).toThrow();
     expect(() => getSmallOrderSurcharge(-1)).toThrow();
-    // @ts-expect-error
+    // @ts-expect-error expecting error on invalid input
     expect(() => getSmallOrderSurcharge("1")).toThrow();
   });
 });
@@ -67,7 +67,7 @@ Even if the distance would be shorter than 500 meters, the minimum fee is always
   it("Throws on invalid inputs", () => {
     expect(() => getFeeByDistance(0)).toThrow();
     expect(() => getFeeByDistance(-1)).toThrow();
-    // @ts-expect-error
+    // @ts-expect-error expecting error on invalid input
     expect(() => getFeeByDistance("1")).toThrow();
   });
 });
@@ -105,7 +105,7 @@ describe(`If the number of items is five or more, an additional 50 cent surcharg
   it("Throws on invalid inputs", () => {
     expect(() => getBulkFee(0)).toThrow();
     expect(() => getBulkFee(-1)).toThrow();
-    // @ts-expect-error
+    // @ts-expect-error expecting error on invalid input
     expect(() => getBulkFee("1")).toThrow();
   });
 });
@@ -124,7 +124,7 @@ describe("Total fee calculations", () => {
   it("Throws on invalid inputs", () => {
     expect(() => getDeliveryFee({ distance: 0, cartValue: 0, itemCount: 0, date: NOT_RUSH_HOUR_DATE })).toThrow();
     expect(() => getDeliveryFee({ distance: -1, cartValue: -1, itemCount: -1, date: NOT_RUSH_HOUR_DATE })).toThrow();
-    // @ts-expect-error
+    // @ts-expect-error expecting error on invalid input
     expect(() => getDeliveryFee({ distance: "1", cartValue: "1", itemCount: "1", date: new Date("invalid date") })).toThrow();
   });
 });
@@ -165,7 +165,7 @@ describe("Detects rush hour correctly, rush hour is on friday 3 - 7 PM UTC", () 
   });
 
   it(`Throws on invalid dates`, () => {
-    // @ts-expect-error
+    // @ts-expect-error expecting error on invalid input
     expect(() => isRushHour("invalid date")).toThrow();
   });
 });
