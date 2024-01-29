@@ -5,13 +5,6 @@ enum Themes {
   DARK = "dark",
 }
 
-const getStoredTheme = () => {
-  const storedTheme = localStorage.getItem("theme");
-  if (storedTheme) {
-    return storedTheme as Themes;
-  }
-};
-
 const getPreferredTheme = () => {
   if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
     return Themes.DARK;
@@ -21,12 +14,8 @@ const getPreferredTheme = () => {
 };
 
 const getStoredThemeOrDefault = () => {
-  const storedTheme = getStoredTheme();
-  if (storedTheme) {
-    return storedTheme;
-  } else {
-    return getPreferredTheme();
-  }
+  const storedTheme = localStorage.theme as Themes;
+  return storedTheme ? storedTheme : getPreferredTheme();
 };
 
 export const useTheme = () => {

@@ -25,7 +25,11 @@ const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const { i18n } = useTranslation();
 
-  const changeLanguage = () => (i18n.language === "en" ? i18n.changeLanguage("fi") : i18n.changeLanguage("en"));
+  const changeLanguage = () => {
+    i18n.language === "en" ? i18n.changeLanguage("fi") : i18n.changeLanguage("en");
+    document.documentElement.lang = i18n.language;
+  };
+
   const logo = theme === "light" ? woltlogoblack : woltlogowhite;
 
   return (
@@ -34,6 +38,7 @@ const Navbar = () => {
         <img src={logo} className="h-[32px] w-[80px]" alt="Wolt Logo" />
         <div className="flex gap-2">
           <button
+            data-test-id="languageSwitch"
             aria-label={i18n.language === "en" ? "Switch to Finnish" : "Switch to English"}
             className={buttonStyle}
             onClick={changeLanguage}
@@ -41,7 +46,7 @@ const Navbar = () => {
             {i18n.language === "en" ? "Suomeksi" : "In English"}
           </button>
           <div className=" flex items-center">
-            <label className="relative inline-flex items-center gap-2 cursor-pointer">
+            <label data-test-id="themeSwitch" className="relative inline-flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
                 onKeyDown={(e) => e.key === "Enter" && toggleTheme()}

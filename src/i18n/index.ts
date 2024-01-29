@@ -21,15 +21,21 @@ export type Translations = {
   [key in TranslationKeys]: string;
 };
 
-i18n.use(initReactI18next).init({
-  resources: {
-    en: {
-      translation: en,
+export const initializei18n = async () => {
+  await i18n.use(initReactI18next).init({
+    resources: {
+      en: {
+        translation: en,
+      },
+      fi: {
+        translation: fi,
+      },
     },
-    fi: {
-      translation: fi,
-    },
-  },
-  lng: "en",
-  fallbackLng: "en",
-});
+    lng: navigator.language.split("-")[0],
+    fallbackLng: "en",
+  });
+
+  document.documentElement.lang = i18n.language;
+};
+
+initializei18n();
