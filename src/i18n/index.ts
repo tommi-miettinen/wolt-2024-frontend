@@ -19,6 +19,7 @@ export enum TranslationKeys {
   CART_VALUE_HELPER_TEXT = "cartValueHelperText",
   NUMBER_OF_ITEMS_INPUT_INFO = "numberOfItemsInputInfo",
   DELIVERY_DISTANCE_INPUT_INFO = "deliveryDistanceInputInfo",
+  ORDER_DATE_INPUT_INFO = "orderDateInputInfo",
 }
 
 export type Translations = {

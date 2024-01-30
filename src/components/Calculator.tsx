@@ -3,6 +3,7 @@ import { getDeliveryFee } from "../services/feeCalculationService";
 import NumberInput from "./NumberInput";
 import { useTranslation } from "react-i18next";
 import { TranslationKeys } from "../i18n";
+import Tooltip from "./Tooltip";
 
 interface FeeDisplayProps extends HTMLAttributes<HTMLDivElement> {
   deliveryFee: number;
@@ -27,17 +28,15 @@ const FeeDisplay = ({ deliveryFee, isValidInput, ...rest }: FeeDisplayProps) => 
   );
 };
 
-const InfoIcon = ({ info }: { info: string }) => {
+const InfoIcon = () => {
   return (
-    <span title={info}>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-        <path
-          fillRule="evenodd"
-          d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
-          clipRule="evenodd"
-        />
-      </svg>
-    </span>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+      <path
+        fillRule="evenodd"
+        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+        clipRule="evenodd"
+      />
+    </svg>
   );
 };
 
@@ -69,7 +68,7 @@ const Calculator = () => {
 
   return (
     <div tabIndex={-1} data-test-id="calculator" className="flex flex-col gap-4 text-primary">
-      <div>
+      <div className="flex flex-col gap-1">
         <label className="py-1 block" htmlFor="cartValue">
           {t(TranslationKeys.CART_VALUE)}
         </label>
@@ -83,13 +82,14 @@ const Calculator = () => {
           maxValue={100000}
           onChange={(value) => setCartValue(value)}
         />
-        <p id="helper-text-explanation" className="mt-2 text-sm">
+        <p id="helper-text-explanation" className="text-sm">
           {t(TranslationKeys.CART_VALUE_HELPER_TEXT)}
         </p>
       </div>
-      <div>
-        <label className="py-1 block" htmlFor="numberOfItems">
+      <div className="flex flex-col gap-1">
+        <label className="py-1 flex items-center gap-1" htmlFor="numberOfItems">
           {t(TranslationKeys.NUMBER_OF_ITEMS)}
+          <Tooltip trigger={<InfoIcon />} content={t(TranslationKeys.NUMBER_OF_ITEMS_INPUT_INFO)} />
         </label>
         <NumberInput
           id="numberOfItems"
@@ -99,12 +99,12 @@ const Calculator = () => {
           placeholder={t(TranslationKeys.NUMBER_OF_ITEMS_PLACEHOLDER)}
           data-test-id="numberOfItems"
           onChange={(value) => setnumberOfItems(value)}
-          icon={<InfoIcon info={t(TranslationKeys.NUMBER_OF_ITEMS_INPUT_INFO)} />}
         />
       </div>
-      <div>
-        <label className="py-1 block" htmlFor="deliveryDistance">
-          {t(TranslationKeys.DELIVERY_DISTANCE)}
+      <div className="flex flex-col gap-1">
+        <label className="py-1 flex items-center gap-1" htmlFor="deliveryDistance">
+          <span>{t(TranslationKeys.DELIVERY_DISTANCE)}</span>
+          <Tooltip trigger={<InfoIcon />} content={t(TranslationKeys.DELIVERY_DISTANCE_INPUT_INFO)} />
         </label>
         <NumberInput
           id="deliveryDistance"
@@ -114,21 +114,23 @@ const Calculator = () => {
           onFocus={(e) => scrollToView(e.target)}
           maxValue={1000000}
           onChange={(value) => setDistance(value)}
-          icon={<InfoIcon info={t(TranslationKeys.DELIVERY_DISTANCE_INPUT_INFO)} />}
         />
       </div>
-      <div className="flex flex-col">
-        <label className="py-1" htmlFor="orderTime">
+      <div className="flex flex-col gap-1 relative">
+        <label className="py-1 flex items-center gap-1" htmlFor="orderTime">
           {t(TranslationKeys.ORDER_DATE)}
+          <Tooltip trigger={<InfoIcon />} content={t(TranslationKeys.ORDER_DATE_INPUT_INFO)} />
         </label>
-        <input
-          data-test-id="orderTime"
-          id="orderTime"
-          value={orderTime}
-          onFocus={(e) => scrollToView(e.target)}
-          onChange={(e) => setorderTime(e.target.value)}
-          type="datetime-local"
-        />
+        <div className="relative">
+          <input
+            data-test-id="orderTime"
+            id="orderTime"
+            value={orderTime}
+            onFocus={(e) => scrollToView(e.target)}
+            onChange={(e) => setorderTime(e.target.value)}
+            type="datetime-local"
+          />
+        </div>
       </div>
       <FeeDisplay className="mt-4" isValidInput={isValidInput} deliveryFee={deliveryFee} />
     </div>

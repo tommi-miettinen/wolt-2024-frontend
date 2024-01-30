@@ -5,7 +5,7 @@ interface NumberInputProps extends Omit<JSX.IntrinsicElements["input"], "onChang
   minValue: number;
   maxValue: number;
   decimalPlaces?: number;
-  icon?: React.ReactNode;
+  icon?: JSX.Element;
 }
 
 const NumberInput = ({ onChange, maxValue, minValue, decimalPlaces = 0, icon, ...rest }: NumberInputProps) => {

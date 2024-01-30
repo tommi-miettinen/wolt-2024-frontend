@@ -13,6 +13,7 @@ const en: Translations = {
   costOfDeliveryIncompleteInput: "Fill in the information to see the cost of delivery",
   skipToMainContent: "Skip to main content",
   darkTheme: "Dark mode",
+  orderDateInputInfo: "During the Friday rush, 15.00 - 19.00 the delivery fee will be multiplied by 1.2x",
   cartValueHelperText: "Orders over 200€ are delivered for free!",
   numberOfItemsInputInfo:
     'If the number of items is five or more, an additional 50 cent surcharge is added for each item above and including the fifth item. An extra "bulk" fee applies for more than 12 items of 1,20€.',
