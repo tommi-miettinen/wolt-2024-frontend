@@ -57,6 +57,8 @@ describe("App", () => {
     const { getByTestId } = render(<App />);
 
     const skipLink = getByTestId("skipLink");
+    expect(skipLink).toBeVisible();
+
     const main = document.querySelector("main") as HTMLElement;
 
     await userEvent.tab();

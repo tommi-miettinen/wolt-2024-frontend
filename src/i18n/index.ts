@@ -24,7 +24,7 @@ export enum TranslationKeys {
 }
 
 export type Translations = {
-  [key in TranslationKeys]: string;
+  [value in TranslationKeys]: string;
 };
 
 export const initializei18n = async () => {

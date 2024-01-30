@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import Navbar, { SkipLink } from "./components/Navbar";
+import Navbar from "./components/Navbar";
 import { TranslationKeys } from "./i18n";
 import Calculator from "./components/Calculator";
 
@@ -11,7 +11,6 @@ const App = () => {
   const { t } = useTranslation();
   return (
     <div className="w-screen h-screen flex flex-col overflow-auto">
-      <SkipLink />
       <Navbar />
       <Hero />
       <main tabIndex={-1} className="w-full h-full sm:h-min m-auto sm:w-[550px] flex flex-col gap-4 bg-transparent focus:outline-none">

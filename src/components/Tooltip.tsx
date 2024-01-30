@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
+import useWindowSize from "../hooks/useWindowSize";
 
 const CustomTooltip = ({ trigger, content }: { trigger: JSX.Element; content: string }) => {
   const [open, setOpen] = useState(false);
 
-  const handleOutsideAction = (event: TouchEvent | MouseEvent) => {
-    const target = event.target as HTMLElement;
-    if (!target || !target.closest(".TooltipContent")) {
-      setOpen(false);
-    }
-  };
+  const windowSize = useWindowSize();
+  const isMobile = windowSize.width < 640;
+
+  const handleOutsideAction = () => setOpen(false);
 
   useEffect(() => {
     if (open) {
@@ -27,12 +26,13 @@ const CustomTooltip = ({ trigger, content }: { trigger: JSX.Element; content: st
     <Tooltip.Provider>
       <Tooltip.Root open={open}>
         <Tooltip.Trigger
+          id="tooltip-trigger"
           tabIndex={-1}
           aria-label="tooltip trigger"
-          className="p-0 m-0 rounded-full outline-none border-none"
-          onClick={() => setOpen((v) => !v)}
-          onMouseEnter={() => setOpen(true)}
-          onMouseLeave={() => setOpen(false)}
+          className="p-0 m-0 rounded-full border-none focus:!ring-transparent"
+          onClick={isMobile ? () => setOpen((v) => !v) : undefined}
+          onMouseEnter={!isMobile ? () => setOpen(true) : undefined}
+          onMouseLeave={!isMobile ? () => setOpen(false) : undefined}
         >
           {trigger}
         </Tooltip.Trigger>

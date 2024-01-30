@@ -6,9 +6,7 @@ import { TranslationKeys } from "../i18n";
 
 const focusMainContent = () => document.querySelector("main")?.focus();
 
-export const SkipLink = () => {
-  const { t } = useTranslation();
-
+export const SkipLink = ({ children }: { children: string }) => {
   return (
     <button
       data-test-id="skipLink"
@@ -16,7 +14,7 @@ export const SkipLink = () => {
       onClick={focusMainContent}
       className="absolute border-0 bg-white rounded-lg left-[-999px] top-2 z-50 text-black p-2 focus:left-2 focus:opacity-100 focus:outline focus:outline-sky-500"
     >
-      {t(TranslationKeys.SKIP_TO_MAIN_CONTENT)}
+      {children}
     </button>
   );
 };
@@ -33,7 +31,8 @@ const Navbar = () => {
   const logo = theme === "light" ? woltlogoblack : woltlogowhite;
 
   return (
-    <div data-test-id="navbar" className="border-b bg-body p-3.5 w-full flex items-center justify-center">
+    <div data-test-id="navbar" className="border-b border-borderColor bg-body p-3.5 w-full flex items-center justify-center">
+      <SkipLink>{t(TranslationKeys.SKIP_TO_MAIN_CONTENT)}</SkipLink>
       <div className="w-[1200px] flex items-center justify-between">
         <img src={logo} className="h-[32px] w-[80px]" alt="Wolt Logo" />
         <div className="flex gap-2 w-[280px]">
