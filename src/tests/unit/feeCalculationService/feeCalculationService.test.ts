@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { ZodError } from "zod";
 import {
   getSmallOrderSurcharge,
   getFeeByDistance,
@@ -35,11 +36,11 @@ describe(`If the cart value is less than 10€, a small order surcharge is added
     expect(getSmallOrderSurcharge(100)).toBe(0);
   });
 
-  it("Throws on invalid inputs", () => {
-    expect(() => getSmallOrderSurcharge(0)).toThrow();
-    expect(() => getSmallOrderSurcharge(-1)).toThrow();
+  it("Expect validation to work", () => {
+    expect(getSmallOrderSurcharge(0)).toBeInstanceOf(ZodError);
+    expect(getSmallOrderSurcharge(-1)).toBeInstanceOf(ZodError);
     // @ts-expect-error expecting error on invalid input
-    expect(() => getSmallOrderSurcharge("1")).toThrow();
+    expect(getSmallOrderSurcharge("1")).toBeInstanceOf(ZodError);
   });
 });
 
@@ -63,11 +64,11 @@ Even if the distance would be shorter than 500 meters, the minimum fee is always
     expect(getFeeByDistance(1501.9)).toBe(4);
   });
 
-  it("Throws on invalid inputs", () => {
-    expect(() => getFeeByDistance(0)).toThrow();
-    expect(() => getFeeByDistance(-1)).toThrow();
+  it("Returns ZodError on invalid inputs", () => {
+    expect(getFeeByDistance(0)).toBeInstanceOf(ZodError);
+    expect(getFeeByDistance(-1)).toBeInstanceOf(ZodError);
     // @ts-expect-error expecting error on invalid input
-    expect(() => getFeeByDistance("1")).toThrow();
+    expect(getFeeByDistance("1")).toBeInstanceOf(ZodError);
   });
 });
 
@@ -95,13 +96,13 @@ describe(`If the number of items is five or more, an additional 50 cent surcharg
     expect(getBulkFee(13.0)).toBe(5.7);
   });
 
-  it("Throws on invalid inputs", () => {
-    expect(() => getBulkFee(0)).toThrow();
-    expect(() => getBulkFee(-1)).toThrow();
+  it("Returns ZodError on invalid inputs", () => {
+    expect(getBulkFee(0)).toBeInstanceOf(ZodError);
+    expect(getBulkFee(-1)).toBeInstanceOf(ZodError);
     // @ts-expect-error expecting error on invalid input
-    expect(() => getBulkFee("1")).toThrow();
+    expect(getBulkFee("1")).toBeInstanceOf(ZodError);
     // @ts-expect-error expecting error on invalid input
-    expect(() => getBulkFee("a")).toThrow();
+    expect(getBulkFee("a")).toBeInstanceOf(ZodError);
   });
 });
 
@@ -116,17 +117,25 @@ describe("Total fee calculations", () => {
     expect(getDeliveryFee({ distance: 1, cartValue: 199.999999, numberOfItems: 1, orderTime: NOT_RUSH_HOUR_DATE })).toBe(2);
   });
 
-  it("Throws on invalid inputs", () => {
-    expect(() => getDeliveryFee({ distance: 0, cartValue: 0, numberOfItems: 0, orderTime: NOT_RUSH_HOUR_DATE })).toThrow();
-    expect(() => getDeliveryFee({ distance: -1, cartValue: -1, numberOfItems: -1, orderTime: NOT_RUSH_HOUR_DATE })).toThrow();
+  it(`Returns ZodError on invalid inputs`, () => {
+    expect(getDeliveryFee({ distance: 0, cartValue: 0, numberOfItems: 0, orderTime: NOT_RUSH_HOUR_DATE })).toBeInstanceOf(ZodError);
+    expect(getDeliveryFee({ distance: -1, cartValue: -1, numberOfItems: -1, orderTime: NOT_RUSH_HOUR_DATE })).toBeInstanceOf(ZodError);
     // @ts-expect-error expecting error on invalid input
-    expect(() => getDeliveryFee({ distance: "1", cartValue: "1", numberOfItems: "1", orderTime: new Date("invalid date") })).toThrow();
+    expect(getDeliveryFee({ distance: "1", cartValue: "1", numberOfItems: "1", orderTime: new Date("invalid date") })).toBeInstanceOf(
+      ZodError
+    );
     // @ts-expect-error expecting error on invalid input
-    expect(() => getDeliveryFee({ distance: 1, cartValue: 1, numberOfItems: 1, orderTime: "invalid date" })).toThrow();
-    expect(() => getDeliveryFee({ distance: 1, cartValue: 1, numberOfItems: 1, orderTime: new Date("invalid date") })).toThrow();
-    expect(() => getDeliveryFee({ distance: 1, cartValue: 1, numberOfItems: -1, orderTime: new Date("2021-10-01T14:59") })).toThrow();
-    expect(() => getDeliveryFee({ distance: 1, cartValue: -1, numberOfItems: 1, orderTime: new Date("2021-10-01T14:59") })).toThrow();
-    expect(() => getDeliveryFee({ distance: -1.001, cartValue: 1, numberOfItems: 1, orderTime: new Date("2021-10-01T14:59") })).toThrow();
+    expect(getDeliveryFee({ distance: 1, cartValue: 1, numberOfItems: 1, orderTime: "invalid date" })).toBeInstanceOf(ZodError);
+    expect(getDeliveryFee({ distance: 1, cartValue: 1, numberOfItems: 1, orderTime: new Date("invalid date") })).toBeInstanceOf(ZodError);
+    expect(getDeliveryFee({ distance: 1, cartValue: 1, numberOfItems: -1, orderTime: new Date("2021-10-01T14:59") })).toBeInstanceOf(
+      ZodError
+    );
+    expect(getDeliveryFee({ distance: 1, cartValue: -1, numberOfItems: 1, orderTime: new Date("2021-10-01T14:59") })).toBeInstanceOf(
+      ZodError
+    );
+    expect(getDeliveryFee({ distance: -1.001, cartValue: 1, numberOfItems: 1, orderTime: new Date("2021-10-01T14:59") })).toBeInstanceOf(
+      ZodError
+    );
   });
 });
 
@@ -167,7 +176,7 @@ describe("Detects rush hour correctly, rush hour is on friday 3 - 7 PM UTC", () 
     expect(isRushHour(SATURDAY_3_PM)).toBe(false);
   });
 
-  it(`Throws on invalid dates`, () => {
-    expect(() => isRushHour(new Date("invalid date"))).toThrow();
+  it(`Returns ZodError on invalid dates`, () => {
+    expect(isRushHour(new Date("invalid date"))).toBeInstanceOf(ZodError);
   });
 });

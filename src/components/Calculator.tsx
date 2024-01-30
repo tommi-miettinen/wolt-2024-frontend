@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { TranslationKeys } from "../i18n";
 import Tooltip from "./Tooltip";
 import InfoIcon from "../icons/InfoIcon";
+import { ZodError } from "zod";
 
 interface FeeDisplayProps extends HTMLAttributes<HTMLDivElement> {
   deliveryFee: number;
@@ -41,15 +42,13 @@ const Calculator = () => {
 
   useEffect(() => {
     const handleDeliveryFee = () => {
-      try {
-        const fee = getDeliveryFee({ distance, cartValue, numberOfItems, orderTime: new Date(orderTime) });
-        setDeliveryFee(fee);
-        setIsValidInput(true);
-      } catch {
-        setDeliveryFee(0);
-        setIsValidInput(false);
-      }
+      const fee = getDeliveryFee({ cartValue, distance, numberOfItems, orderTime: new Date(orderTime) });
+      if (fee instanceof ZodError) return setIsValidInput(false);
+
+      setDeliveryFee(fee);
+      setIsValidInput(true);
     };
+
     handleDeliveryFee();
   }, [cartValue, distance, numberOfItems, orderTime]);
 

@@ -54,11 +54,7 @@ label {
   @apply text-white;
 }
 
-[data-theme="light"] *:focus {
-  @apply ring-sky-500 ring-offset-0;
-}
-
-[data-theme="dark"] *:focus {
+*:focus {
   @apply ring-sky-500 ring-offset-0;
 }
 
