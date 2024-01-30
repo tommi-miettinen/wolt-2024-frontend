@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 export const deliveryFeeInputSchema = z.object({
-  distance: z.number().positive(),
+  distance: z.number().positive().int(),
   cartValue: z.number().positive(),
-  numberOfItems: z.number().positive(),
+  numberOfItems: z.number().positive().int(),
   orderTime: z.date(),
 });
 
@@ -45,12 +45,10 @@ export const getSmallOrderSurcharge = (cartValue: number) => {
 };
 
 export const getBulkFee = (numberOfItems: number) => {
-  const validationResult = z.number().positive().safeParse(numberOfItems);
+  const validationResult = z.number().positive().int().safeParse(numberOfItems);
   if (!validationResult.success) return validationResult.error;
 
-  const numberOfItemsRounded = Math.round(numberOfItems);
-
-  const itemsBeyondTier1 = Math.max(numberOfItemsRounded - BULK_ITEMS_TIER_1_THRESHOLD, 0);
+  const itemsBeyondTier1 = Math.max(numberOfItems - BULK_ITEMS_TIER_1_THRESHOLD, 0);
   let fee = itemsBeyondTier1 * BULK_ITEMS_TIER_1_FEE;
 
   if (numberOfItems > BULK_ITEMS_TIER_2_THRESHOLD) {
@@ -61,13 +59,12 @@ export const getBulkFee = (numberOfItems: number) => {
 };
 
 export const getFeeByDistance = (distance: number) => {
-  const validationResult = z.number().positive().safeParse(distance);
+  const validationResult = z.number().positive().int().safeParse(distance);
   if (!validationResult.success) return validationResult.error;
 
-  const distanceRounded = Math.round(distance);
-  if (distanceRounded <= DISTANCE_AFTER_ADDITIONAL_FEE_STARTS) return INITIAL_DELIVERY_FEE;
+  if (distance <= DISTANCE_AFTER_ADDITIONAL_FEE_STARTS) return INITIAL_DELIVERY_FEE;
 
-  const distanceBeyondBase = distanceRounded - DISTANCE_AFTER_ADDITIONAL_FEE_STARTS;
+  const distanceBeyondBase = distance - DISTANCE_AFTER_ADDITIONAL_FEE_STARTS;
   const intervalsOverBase = Math.ceil(distanceBeyondBase / ADDITIONAL_DISTANCE_INTERVAL);
   const additionalFee = intervalsOverBase * ADDITIONAL_DISTANCE_FEE;
 
