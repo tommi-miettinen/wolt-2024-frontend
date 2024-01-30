@@ -1,4 +1,5 @@
 import { useState, ChangeEvent } from "react";
+import { z } from "zod";
 
 interface NumberInputProps extends Omit<JSX.IntrinsicElements["input"], "onChange"> {
   onChange: (value: number) => void;
@@ -7,28 +8,32 @@ interface NumberInputProps extends Omit<JSX.IntrinsicElements["input"], "onChang
   decimalPlaces?: number;
 }
 
+const createRegex = (decimalPlaces: number, isNegative: boolean) => {
+  const decimalPart = decimalPlaces === 0 ? "" : `\\.?[0-9]{0,${decimalPlaces}}`;
+  const negativePart = isNegative ? "-" : "";
+  return new RegExp(`^${negativePart}[0-9]+${decimalPart}$`);
+};
+
 const NumberInput = ({ onChange, maxValue, minValue, decimalPlaces = 0, ...rest }: NumberInputProps) => {
   const [inputValue, setInputValue] = useState("");
-
-  const regex = new RegExp(`^-?[0-9]*\\.?[0-9]{0,${decimalPlaces}}$`);
+  const regex = createRegex(decimalPlaces, minValue < 0);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
+    const { value } = e.target;
 
-    if (!regex.test(newValue)) return;
-    if (newValue === "") {
+    if (value === "") {
       setInputValue("");
       onChange(0);
       return;
     }
-    if (newValue[0] === ".") return;
-    if (decimalPlaces === 0 && newValue.includes(".")) return;
-    if (minValue >= 0 && newValue.includes("-")) return;
-    if (parseFloat(newValue) > maxValue) return;
-    if (parseFloat(newValue) < minValue) return;
 
-    setInputValue(newValue);
-    onChange(+parseFloat(newValue).toFixed(decimalPlaces));
+    if (!regex.test(value)) return;
+
+    const validationResult = z.number().min(minValue).max(maxValue).safeParse(parseFloat(value));
+    if (!validationResult.success) return;
+
+    setInputValue(value);
+    onChange(+parseFloat(value).toFixed(decimalPlaces));
   };
 
   return <input {...rest} autoComplete="off" type="text" value={inputValue} onChange={handleInputChange} />;

@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const deliveryFeeInputSchema = z.object({
-  distance: z.number().positive().int(),
-  cartValue: z.number().positive(),
+  distance: z.number().positive().int().safe(),
+  cartValue: z.number().positive().safe(),
   numberOfItems: z.number().positive().int(),
   orderTime: z.date(),
 });
@@ -38,14 +38,14 @@ export const isRushHour = (date: Date) => {
 };
 
 export const getSmallOrderSurcharge = (cartValue: number) => {
-  const validationResult = z.number().positive().safeParse(cartValue);
+  const validationResult = z.number().positive().safe().safeParse(cartValue);
   if (!validationResult.success) return validationResult.error;
 
   return +Math.max(0, CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE - cartValue).toFixed(2);
 };
 
 export const getBulkFee = (numberOfItems: number) => {
-  const validationResult = z.number().positive().int().safeParse(numberOfItems);
+  const validationResult = z.number().positive().int().safe().safeParse(numberOfItems);
   if (!validationResult.success) return validationResult.error;
 
   const itemsBeyondTier1 = Math.max(numberOfItems - BULK_ITEMS_TIER_1_THRESHOLD, 0);
@@ -59,7 +59,7 @@ export const getBulkFee = (numberOfItems: number) => {
 };
 
 export const getFeeByDistance = (distance: number) => {
-  const validationResult = z.number().positive().int().safeParse(distance);
+  const validationResult = z.number().positive().int().safe().safeParse(distance);
   if (!validationResult.success) return validationResult.error;
 
   if (distance <= DISTANCE_AFTER_ADDITIONAL_FEE_STARTS) return INITIAL_DELIVERY_FEE;
