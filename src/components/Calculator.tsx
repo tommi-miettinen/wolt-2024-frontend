@@ -4,7 +4,7 @@ import NumberInput from "./NumberInput";
 import { useTranslation } from "react-i18next";
 import { TranslationKeys } from "../i18n";
 import Tooltip from "./Tooltip";
-import InfoIcon from "../icons/InfoIcon";
+import InfoIcon from "../assets/icons/InfoIcon";
 import { ZodError } from "zod";
 
 interface FeeDisplayProps extends HTMLAttributes<HTMLDivElement> {

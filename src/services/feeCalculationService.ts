@@ -29,7 +29,7 @@ export const BULK_ITEMS_TIER_1_FEE = 0.5;
 export const BULK_ITEMS_TIER_2_FEE = 1.2;
 
 export const isRushHour = (date: Date) => {
-  const validationResult = z.date().safeParse(date);
+  const validationResult = deliveryFeeInputSchema.shape.orderTime.safeParse(date);
   if (!validationResult.success) return validationResult.error;
 
   const day = date.getDay();
@@ -45,7 +45,7 @@ export const getSmallOrderSurcharge = (cartValue: number) => {
 };
 
 export const getBulkFee = (numberOfItems: number) => {
-  const validationResult = z.number().positive().int().safe().safeParse(numberOfItems);
+  const validationResult = deliveryFeeInputSchema.shape.numberOfItems.safeParse(numberOfItems);
   if (!validationResult.success) return validationResult.error;
 
   const itemsBeyondTier1 = Math.max(numberOfItems - BULK_ITEMS_TIER_1_THRESHOLD, 0);
@@ -59,7 +59,7 @@ export const getBulkFee = (numberOfItems: number) => {
 };
 
 export const getFeeByDistance = (distance: number) => {
-  const validationResult = z.number().positive().int().safe().safeParse(distance);
+  const validationResult = deliveryFeeInputSchema.shape.distance.safeParse(distance);
   if (!validationResult.success) return validationResult.error;
 
   if (distance <= DISTANCE_AFTER_ADDITIONAL_FEE_STARTS) return INITIAL_DELIVERY_FEE;
