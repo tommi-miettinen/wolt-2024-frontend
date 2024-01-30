@@ -100,6 +100,7 @@ describe("NumberInput", () => {
     inp.focus();
     await userEvent.paste("100");
     expect(inp).toHaveValue("100");
+    expect(value).toBe(100);
 
     await userEvent.clear(inp);
     await userEvent.paste("100.1");

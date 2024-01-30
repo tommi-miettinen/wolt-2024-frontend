@@ -13,6 +13,10 @@ const fi: Translations = {
   costOfDeliveryIncompleteInput: "Täytä kaikki kentät nähdäksesi kuljetuksen hinnan",
   skipToMainContent: "Siirry pääsisältöön",
   darkTheme: "Tumma teema",
+  cartValueHelperText: "Yli 200€ ostokset toimitetaan ilmaiseksi!",
+  deliveryDistanceInputInfo: "Toimitusmaksu on 2€ + 1€ jokaista alkavaa 500 metriä kohden.",
+  numberOfItemsInputInfo:
+    "Jos tuotteita on viisi tai enemmän, lisätään 50 sentin lisämaksu jokaisesta tuotteesta viidennen tuotteen jälkeen. Yli 12 tuotteen tilauksista veloitetaan lisäksi 1,20€ suuruinen lisämaksu.",
 };
 
 export default fi;

@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { DeliveryFeeInput } from "./types";
 
 export const CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE = 10;
 export const MIN_CART_VALUE_FOR_FREE_DELIVERY = 200;
@@ -26,10 +25,10 @@ export const BULK_ITEMS_TIER_2_FEE = 1.2;
  * The rush hour is defined as a half-open interval [15:00, 19:00),
  * which means it includes 15:00 and all times up to, but not including, 19:00.
  *
- * @param {Date} date - The date and time to check.
+ * @param date - The date and time to check.
  * @returns {boolean} - Returns true if the date is during rush hour, false otherwise.
  */
-export const isRushHour = (date: Date) => {
+export const isRushHour = (date: Date): boolean => {
   z.date().parse(date);
   const day = date.getDay();
   const hour = date.getHours();
@@ -64,7 +63,7 @@ export const getBulkFee = (numberOfItems: number) => {
     fee += BULK_ITEMS_TIER_2_FEE;
   }
 
-  return fee;
+  return +fee.toFixed(2);
 };
 
 /**
@@ -75,16 +74,23 @@ export const getBulkFee = (numberOfItems: number) => {
  */
 export const getFeeByDistance = (distance: number) => {
   z.number().positive().parse(distance);
-  const distRounded = Math.round(distance);
+  const distanceRounded = Math.round(distance);
 
-  if (distRounded <= DISTANCE_AFTER_ADDITIONAL_FEE_STARTS) return INITIAL_DELIVERY_FEE;
+  if (distanceRounded <= DISTANCE_AFTER_ADDITIONAL_FEE_STARTS) return INITIAL_DELIVERY_FEE;
 
-  const distanceBeyondBase = distRounded - DISTANCE_AFTER_ADDITIONAL_FEE_STARTS;
+  const distanceBeyondBase = distanceRounded - DISTANCE_AFTER_ADDITIONAL_FEE_STARTS;
   const intervalsOverBase = Math.ceil(distanceBeyondBase / ADDITIONAL_DISTANCE_INTERVAL);
   const additionalFee = intervalsOverBase * ADDITIONAL_DISTANCE_FEE;
 
   return +(INITIAL_DELIVERY_FEE + additionalFee).toFixed(2);
 };
+
+interface DeliveryFeeInput {
+  distance: number;
+  cartValue: number;
+  numberOfItems: number;
+  orderTime: Date;
+}
 
 /**
  * @param deliveryFeeInput

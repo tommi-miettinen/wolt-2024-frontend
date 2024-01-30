@@ -16,6 +16,9 @@ export enum TranslationKeys {
   COST_OF_DELIVERY_INCOMPLETE_INPUT = "costOfDeliveryIncompleteInput",
   SKIP_TO_MAIN_CONTENT = "skipToMainContent",
   DARK_THEME = "darkTheme",
+  CART_VALUE_HELPER_TEXT = "cartValueHelperText",
+  NUMBER_OF_ITEMS_INPUT_INFO = "numberOfItemsInputInfo",
+  DELIVERY_DISTANCE_INPUT_INFO = "deliveryDistanceInputInfo",
 }
 
 export type Translations = {

@@ -1,12 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { render, configure, fireEvent } from "@testing-library/react";
 import * as matchers from "@testing-library/jest-dom/matchers";
-import { getDeliveryFee } from "../../services/feeCalculationService/internal";
+import { getDeliveryFee } from "../../services/feeCalculationService";
 import Calculator from "../../components/Calculator";
 import userEvent from "@testing-library/user-event";
 
 configure({ testIdAttribute: "data-test-id" });
 expect.extend(matchers);
+window.HTMLElement.prototype.scrollIntoView = function () {};
 
 const NOT_RUSH_HOUR = new Date("2021-01-01T12:00:00.000Z");
 

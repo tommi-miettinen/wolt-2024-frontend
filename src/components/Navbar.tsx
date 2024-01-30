@@ -36,16 +36,21 @@ const Navbar = () => {
     <div data-test-id="navbar" className="bg-body p-3.5 w-full flex items-center justify-center">
       <div className="w-[1200px] flex items-center justify-between">
         <img src={logo} className="h-[32px] w-[80px]" alt="Wolt Logo" />
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-[280px]">
           <button
             data-test-id="languageSwitch"
             aria-label={i18n.language === "en" ? "Switch to Finnish" : "Switch to English"}
             onClick={changeLanguage}
+            className="!border-transparent"
           >
             {i18n.language === "en" ? "Suomeksi" : "In English"}
           </button>
-          <div className=" flex items-center">
-            <label data-test-id="themeSwitch" className="relative inline-flex items-center gap-2 cursor-pointer">
+          <div className="flex items-center">
+            <label
+              aria-label={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}
+              data-test-id="themeSwitch"
+              className="relative inline-flex items-center gap-2 cursor-pointer"
+            >
               <input
                 type="checkbox"
                 onKeyDown={(e) => e.key === "Enter" && toggleTheme()}
