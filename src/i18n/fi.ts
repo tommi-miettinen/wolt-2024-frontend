@@ -13,12 +13,13 @@ const fi: Translations = {
   costOfDeliveryIncompleteInput: "Täytä kaikki kentät nähdäksesi kuljetuksen hinnan",
   skipToMainContent: "Siirry pääsisältöön",
   darkTheme: "Tumma teema",
-  cartValueHelperText: "Yli 200€ ostokset toimitetaan ilmaiseksi!",
-  orderDateInputInfo: "Ruuhka-aikoina kuljetuksen hinta kerrotaan 1.2. Ruuhka-aika on perjantaisin 15.00 - 19.00.",
+  cartValueHelperText: "Yli 200.00€ ostokset toimitetaan ilmaiseksi!",
+  orderDateInputInfo: "Ruuhka-aikoina (perjantaisin 15.00 - 19.00) kuljetuksen hinta kerrotaan 1.2x.",
+  cartValueInputInfo: "Alle 10.00€ tilauksista veloitetaan erotus 10.00€:n ja tilauksen hinnan välillä",
   deliveryDistanceInputInfo:
-    "Toimitusetäisyysmaksu: Ensimmäinen kilometri maksaa 2€. Sen jälkeen jokaista alkavaa 500 metriä kohden lisätään 1€.",
+    "Toimitusetäisyysmaksu: Ensimmäinen kilometri maksaa 2.00€. Sen jälkeen jokaista alkavaa 500 metriä kohden lisätään 1.00€.",
   numberOfItemsInputInfo:
-    "Jos tuotteita on viisi tai enemmän, lisätään 50 sentin lisämaksu jokaisesta tuotteesta viidennen tuotteen jälkeen. Yli 12 tuotteen tilauksista veloitetaan lisäksi 1,20€ suuruinen lisämaksu.",
+    "Jos tuotteita on viisi tai enemmän, lisätään 0.50€ lisämaksu jokaisesta tuotteesta viidennen tuotteen jälkeen. Yli 12 tuotteen tilauksista veloitetaan lisäksi 1,20€ suuruinen lisämaksu.",
 };
 
 export default fi;

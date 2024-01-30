@@ -13,10 +13,11 @@ const en: Translations = {
   costOfDeliveryIncompleteInput: "Fill in the information to see the cost of delivery",
   skipToMainContent: "Skip to main content",
   darkTheme: "Dark mode",
-  orderDateInputInfo: "During the Friday rush, 15.00 - 19.00 the delivery fee will be multiplied by 1.2x",
+  orderDateInputInfo: "During (Friday rush 15.00 - 19.00) the delivery fee will be multiplied by 1.2x",
   cartValueHelperText: "Orders over 200€ are delivered for free!",
+  cartValueInputInfo: "Orders under 10€ have a small delivery surcharge to make up the difference to 10€.",
   numberOfItemsInputInfo:
-    'If the number of items is five or more, an additional 50 cent surcharge is added for each item above and including the fifth item. An extra "bulk" fee applies for more than 12 items of 1,20€.',
+    "Additional 0.50€ fee for each item beyond 4. For orders with more than 12 items, an extra bulk fee of 1.20€ is added.",
   deliveryDistanceInputInfo: "The delivery fee is 2€ + 1€ for every 500 meters.",
 };
 

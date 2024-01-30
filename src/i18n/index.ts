@@ -20,6 +20,7 @@ export enum TranslationKeys {
   NUMBER_OF_ITEMS_INPUT_INFO = "numberOfItemsInputInfo",
   DELIVERY_DISTANCE_INPUT_INFO = "deliveryDistanceInputInfo",
   ORDER_DATE_INPUT_INFO = "orderDateInputInfo",
+  CART_VALUE_INPUT_INFO = "cartValueInputInfo",
 }
 
 export type Translations = {

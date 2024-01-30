@@ -5,10 +5,9 @@ interface NumberInputProps extends Omit<JSX.IntrinsicElements["input"], "onChang
   minValue: number;
   maxValue: number;
   decimalPlaces?: number;
-  icon?: JSX.Element;
 }
 
-const NumberInput = ({ onChange, maxValue, minValue, decimalPlaces = 0, icon, ...rest }: NumberInputProps) => {
+const NumberInput = ({ onChange, maxValue, minValue, decimalPlaces = 0, ...rest }: NumberInputProps) => {
   const [inputValue, setInputValue] = useState("");
 
   const regex = new RegExp(`^-?[0-9]*\\.?[0-9]{0,${decimalPlaces}}$`);
@@ -32,12 +31,7 @@ const NumberInput = ({ onChange, maxValue, minValue, decimalPlaces = 0, icon, ..
     onChange(+parseFloat(newValue).toFixed(decimalPlaces));
   };
 
-  return (
-    <div style={{ display: "flex", position: "relative", alignItems: "center" }}>
-      <input {...rest} type="text" value={inputValue} onChange={handleInputChange} />
-      {icon && <div style={{ position: "absolute", right: 8 }}>{icon}</div>}
-    </div>
-  );
+  return <input {...rest} autoComplete="off" type="text" value={inputValue} onChange={handleInputChange} />;
 };
 
 export default NumberInput;
