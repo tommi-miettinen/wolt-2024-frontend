@@ -13,7 +13,7 @@ const App = () => {
     <div className="w-screen h-screen flex flex-col overflow-auto">
       <Navbar />
       <Hero />
-      <main tabIndex={-1} className="w-full h-full sm:h-min m-auto sm:w-[550px] flex flex-col gap-4 bg-transparent focus:outline-none">
+      <main tabIndex={-1} className="w-full h-full sm:h-min m-auto sm:w-[550px] flex flex-col gap-4 focus:outline-none">
         <h1 className="hidden sm:block font-omnes-bold !text-black text-3xl sm:text-4xl">
           {t(TranslationKeys.CALCULATE_COST_OF_DELIVERY)}
         </h1>

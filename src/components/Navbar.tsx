@@ -12,7 +12,7 @@ export const SkipLink = ({ children }: { children: string }) => {
       data-test-id="skipLink"
       onKeyDown={(e) => e.key === "Enter" && focusMainContent()}
       onClick={focusMainContent}
-      className="absolute border-0 bg-white rounded-lg left-[-999px] top-2 z-50 text-black p-2 focus:left-2 focus:opacity-100 focus:outline focus:outline-sky-500"
+      className="absolute border-0 text-textPrimaryColor bg-body rounded-lg left-[-999px] top-2 z-50 p-2 focus:left-2 focus:opacity-100 focus:outline focus:outline-sky-500"
     >
       {children}
     </button>

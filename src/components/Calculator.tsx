@@ -59,7 +59,7 @@ const Calculator = () => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-1">
           <label htmlFor="cartValue">{t(TranslationKeys.CART_VALUE)}</label>
-          <Tooltip trigger={<InfoIcon />} content={t(TranslationKeys.CART_VALUE_INPUT_INFO)} />
+          <Tooltip triggerAriaLabel="Info about surcharge" trigger={<InfoIcon />} content={t(TranslationKeys.CART_VALUE_INPUT_INFO)} />
         </div>
         <NumberInput
           id="cartValue"
@@ -78,7 +78,11 @@ const Calculator = () => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-1 ">
           <label htmlFor="numberOfItems">{t(TranslationKeys.NUMBER_OF_ITEMS)}</label>
-          <Tooltip trigger={<InfoIcon />} content={t(TranslationKeys.NUMBER_OF_ITEMS_INPUT_INFO)} />
+          <Tooltip
+            triggerAriaLabel="Info about item count effect on delivery fee"
+            trigger={<InfoIcon />}
+            content={t(TranslationKeys.NUMBER_OF_ITEMS_INPUT_INFO)}
+          />
         </div>
         <NumberInput
           id="numberOfItems"
@@ -95,7 +99,11 @@ const Calculator = () => {
           <label htmlFor="deliveryDistance">
             <span>{t(TranslationKeys.DELIVERY_DISTANCE)}</span>
           </label>
-          <Tooltip trigger={<InfoIcon />} content={t(TranslationKeys.DELIVERY_DISTANCE_INPUT_INFO)} />
+          <Tooltip
+            triggerAriaLabel="Info about delivery distance effect on delivery fee"
+            trigger={<InfoIcon />}
+            content={t(TranslationKeys.DELIVERY_DISTANCE_INPUT_INFO)}
+          />
         </div>
         <NumberInput
           id="deliveryDistance"
@@ -110,7 +118,11 @@ const Calculator = () => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-1">
           <label htmlFor="orderTime">{t(TranslationKeys.ORDER_DATE)}</label>
-          <Tooltip trigger={<InfoIcon />} content={t(TranslationKeys.ORDER_DATE_INPUT_INFO)} />
+          <Tooltip
+            triggerAriaLabel="Info about rush hour effect on delivery fee"
+            trigger={<InfoIcon />}
+            content={t(TranslationKeys.ORDER_DATE_INPUT_INFO)}
+          />
         </div>
         <input
           data-test-id="orderTime"

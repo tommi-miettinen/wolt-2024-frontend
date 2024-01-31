@@ -46,28 +46,25 @@ label {
   @apply cursor-pointer;
 }
 
-[data-theme="light"] * {
+[data-theme="light"] body {
   @apply text-black;
 }
 
-[data-theme="dark"] * {
+[data-theme="dark"] body {
   @apply text-white;
 }
 
-*:focus {
-  @apply ring-sky-500 ring-offset-0;
+input {
+  @apply focus:ring focus:ring-sky-500 focus:ring-offset-0 rounded-lg w-full p-2;
+  @apply hover:ring hover:ring-sky-500 bg-transparent outline-none;
 }
 
 [data-theme="dark"] input {
-  @apply outline-offset-0 bg-transparent border outline-none border-gray-700 w-full p-2 rounded-lg;
-  @apply focus:ring focus:ring-sky-500 focus:ring-offset-0;
-  @apply hover:outline hover:outline-sky-300;
+  @apply border outline-none border-gray-700 w-full;
 }
 
 [data-theme="light"] input {
-  @apply outline-offset-0 bg-transparent border outline-none border-gray-300 w-full p-2 rounded-lg;
-  @apply focus:ring focus:ring-sky-600 focus:ring-offset-0;
-  @apply hover:outline hover:outline-sky-500;
+  @apply border outline-none border-gray-300 w-full;
 }
 
 button {
@@ -77,11 +74,10 @@ button {
 
 [data-theme="light"] button {
   @apply border-gray-300;
-  @apply focus:ring focus:ring-sky-600 focus:ring-offset-0 focus:border-transparent;
+  @apply focus:ring focus:ring-sky-500 focus:ring-offset-0 focus:border-transparent;
 }
 
 [data-theme="dark"] button {
-  @apply bg-transparent;
   @apply text-white border border-gray-700;
   @apply focus:ring focus:ring-sky-500 focus:ring-offset-0;
 }

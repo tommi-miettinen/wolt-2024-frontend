@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { ZodError, z } from "zod";
 
 export const deliveryFeeInputSchema = z.object({
   distance: z.number().positive().int().safe(),
@@ -38,7 +38,7 @@ export const isRushHour = (date: Date) => {
 };
 
 export const getSmallOrderSurcharge = (cartValue: number) => {
-  const validationResult = z.number().positive().safe().safeParse(cartValue);
+  const validationResult = deliveryFeeInputSchema.shape.cartValue.safeParse(cartValue);
   if (!validationResult.success) return validationResult.error;
 
   return +Math.max(0, CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE - cartValue).toFixed(2);
@@ -79,15 +79,21 @@ export const getDeliveryFee = (deliveryFeeInput: DeliveryFeeInput) => {
 
   if (cartValue >= MIN_CART_VALUE_FOR_FREE_DELIVERY) return 0;
 
-  let fee = 0;
+  const smallOrderSurcharge = getSmallOrderSurcharge(cartValue);
+  if (smallOrderSurcharge instanceof ZodError) return smallOrderSurcharge;
 
-  //Its safe to cast here because we validate at the start
-  fee += getSmallOrderSurcharge(cartValue) as number;
-  fee += getFeeByDistance(distance) as number;
-  fee += getBulkFee(numberOfItems) as number;
-  const rushHour = isRushHour(orderTime) as boolean;
+  const feeByDistanceResult = getFeeByDistance(distance);
+  if (feeByDistanceResult instanceof ZodError) return feeByDistanceResult;
 
-  if (rushHour) {
+  const bulkFeeResult = getBulkFee(numberOfItems);
+  if (bulkFeeResult instanceof ZodError) return bulkFeeResult;
+
+  const rushHourResult = isRushHour(orderTime);
+  if (rushHourResult instanceof ZodError) return rushHourResult;
+
+  let fee = feeByDistanceResult + bulkFeeResult + smallOrderSurcharge;
+
+  if (rushHourResult) {
     fee = fee * RUSH_HOUR_FEE_MULTIPLIER;
   }
 

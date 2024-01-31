@@ -7,12 +7,12 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "test": "vitest",
+    "coverage": "vitest run --coverage",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "testlint": "npm run lint && npm run test",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@floating-ui/react": "^0.26.8",
     "@radix-ui/react-tooltip": "^1.0.7",
     "i18next": "^23.7.20",
     "react": "^18.2.0",
@@ -31,6 +31,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react-swc": "^3.3.2",
+    "@vitest/coverage-v8": "^1.2.2",
     "autoprefixer": "^10.4.15",
     "eslint": "^8.45.0",
     "eslint-plugin-jsx-a11y": "^6.8.0",

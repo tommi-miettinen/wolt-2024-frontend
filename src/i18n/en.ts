@@ -18,7 +18,7 @@ const en: Translations = {
   cartValueInputInfo: "Orders under 10€ have a small delivery surcharge to make up the difference to 10€.",
   numberOfItemsInputInfo:
     "Additional 0.50€ fee for each item beyond 4. For orders with more than 12 items, an extra bulk fee of 1.20€ is added.",
-  deliveryDistanceInputInfo: "The delivery fee is 2€ + 1€ for every 500 meters.",
+  deliveryDistanceInputInfo: "The delivery fee is 2.00€ for the first 1000 meters and 0.50€ for each additional 500 meters.",
 };
 
 export default en;

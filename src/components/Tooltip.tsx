@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import useWindowSize from "../hooks/useWindowSize";
 
-const CustomTooltip = ({ trigger, content }: { trigger: JSX.Element; content: string }) => {
+const CustomTooltip = ({ trigger, content, triggerAriaLabel }: { trigger: JSX.Element; content: string; triggerAriaLabel: string }) => {
   const [open, setOpen] = useState(false);
 
   const windowSize = useWindowSize();
@@ -26,9 +26,9 @@ const CustomTooltip = ({ trigger, content }: { trigger: JSX.Element; content: st
     <Tooltip.Provider>
       <Tooltip.Root open={open}>
         <Tooltip.Trigger
-          id="tooltip-trigger"
+          aria-label={triggerAriaLabel}
+          id={`tooltip-trigger-${triggerAriaLabel.toLowerCase().replace(" ", "-")}`}
           tabIndex={-1}
-          aria-label="tooltip trigger"
           className="p-0 m-0 rounded-full border-none focus:!ring-transparent"
           onClick={isMobile ? () => setOpen((v) => !v) : undefined}
           onMouseEnter={!isMobile ? () => setOpen(true) : undefined}

@@ -19,7 +19,7 @@ const fi: Translations = {
   deliveryDistanceInputInfo:
     "Toimitusetäisyysmaksu: Ensimmäinen kilometri maksaa 2.00€. Sen jälkeen jokaista alkavaa 500 metriä kohden lisätään 1.00€.",
   numberOfItemsInputInfo:
-    "Jos tuotteita on viisi tai enemmän, lisätään 0.50€ lisämaksu jokaisesta tuotteesta viidennen tuotteen jälkeen. Yli 12 tuotteen tilauksista veloitetaan lisäksi 1,20€ suuruinen lisämaksu.",
+    "0.50€ lisämaksu jokaisesta tuotteesta neljännen tuotteen jälkeen. Yli 12 tuotteen tilauksista veloitetaan lisäksi 1,20€ suuruinen lisämaksu.",
 };
 
 export default fi;
