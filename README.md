@@ -37,7 +37,9 @@ Rules for calculating a delivery fee
 * During the Friday rush, 3 - 7 PM, the delivery fee (the total fee including possible surcharges) will be multiplied by 1.2x. However, the fee still cannot be more than the max (15€). Considering timezone, for simplicity, **use UTC as a timezone in backend solutions** (so Friday rush is 3 - 7 PM UTC). **In frontend solutions, use the timezone of the browser** (so Friday rush is 3 - 7 PM in the timezone of the browser).
 
 ### PageSpeed Insights
-[Report](https://pagespeed.web.dev/analysis/https-d2cz30m2w9guia-cloudfront-net/95f87tkbmi?form_factor=desktop)
+![kuva](https://github.com/tommi-miettinen/wolt/assets/63008431/e3e6ef1d-1e30-44d7-b475-2ffef34299ab)
+
+[Report](https://pagespeed.web.dev/analysis/https-d2cz30m2w9guia-cloudfront-net/zq31c5ui0x?form_factor=desktop)
 
 
 ### Technologies used
