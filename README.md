@@ -1,6 +1,6 @@
 # Wolt Summer 2024 Engineering Internship
 
-![firefox_QL2HOGHZ8p](https://github.com/tommi-miettinen/wolt/assets/63008431/1c44646c-94b3-49ff-825a-8255328ffdfb)
+![kuva](https://github.com/tommi-miettinen/wolt-2024-frontend/assets/63008431/39ab6639-f78a-4f77-9fa1-17e99168c873)
 
 ### Live demo
 https://d2cz30m2w9guia.cloudfront.net/
