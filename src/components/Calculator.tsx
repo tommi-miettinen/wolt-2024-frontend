@@ -1,5 +1,5 @@
 import { Fragment, HTMLAttributes, useEffect, useState } from "react";
-import { getDeliveryFee } from "../services/feeCalculationService";
+import { getDeliveryFee, deliveryFeeInputSchema } from "../services/feeCalculationService";
 import NumberInput from "./NumberInput";
 import { useTranslation } from "react-i18next";
 import { TranslationKeys } from "../i18n";
@@ -53,6 +53,12 @@ const Calculator = () => {
   }, [cartValue, distance, numberOfItems, orderTime]);
 
   const scrollToView = (input: HTMLInputElement) => input.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  const handleDateInput = (value: string) => {
+    const validationResult = deliveryFeeInputSchema.shape.orderTime.safeParse(new Date(value));
+    if (!validationResult.success) return;
+    setorderTime(value);
+  };
 
   return (
     <div tabIndex={-1} data-test-id="calculator" className="flex flex-col gap-4 text-primary">
@@ -129,7 +135,7 @@ const Calculator = () => {
           id="orderTime"
           value={orderTime}
           onFocus={(e) => scrollToView(e.target)}
-          onChange={(e) => setorderTime(e.target.value)}
+          onChange={(e) => handleDateInput(e.target.value)}
           type="datetime-local"
         />
       </div>
