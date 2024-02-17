@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Omnes bold";
+  src: url("./assets/fonts/Omnes Bold.otf") format("opentype");
+}
+
+.swap-bg {
+  animation: swapBg 20s ease-in-out alternate infinite;
+}
+
+@keyframes swapBg {
+  0% {
+    opacity: 1;
+    background-color: #f0ecf4;
+    background-image: url("./assets/images/woltbg.jpg");
+  }
+  40% {
+    opacity: 1;
+  }
+  49% {
+    background-image: url("./assets/images/woltbg.jpg");
+    background-color: #f0ecf4;
+  }
+  50% {
+    opacity: 0;
+    background-image: url("./assets/images/woltbg2.jpg");
+    background-color: #ebbaac;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    background-image: url("./assets/images/woltbg2.jpg");
+    background-color: #ebbaac;
+  }
+}
+
+label {
+  @apply cursor-pointer;
+}
+
+[data-theme="light"] body {
+  @apply text-black;
+}
+
+[data-theme="dark"] body {
+  @apply text-white;
+}
+
+input {
+  @apply focus:ring focus:ring-sky-500 focus:ring-offset-0 rounded-lg w-full p-2;
+  @apply hover:ring hover:ring-sky-500 bg-transparent outline-none;
+}
+
+[data-theme="dark"] input {
+  @apply border outline-none border-gray-700 w-full;
+}
+
+[data-theme="light"] input {
+  @apply border outline-none border-gray-300 w-full;
+}
+
+button {
+  @apply outline-none focus:outline-none px-5 py-2 rounded-lg border;
+  @apply focus:ring-offset-0;
+}
+
+[data-theme="light"] button {
+  @apply border-gray-300;
+  @apply focus:ring focus:ring-sky-500 focus:ring-offset-0 focus:border-transparent;
+}
+
+[data-theme="dark"] button {
+  @apply text-white border border-gray-700;
+  @apply focus:ring focus:ring-sky-500 focus:ring-offset-0;
+}
