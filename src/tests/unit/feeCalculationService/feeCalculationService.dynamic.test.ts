@@ -2,26 +2,20 @@ import { describe, it, expect } from "vitest";
 import { ZodError } from "zod";
 import { createFeeCalculationService } from "../../../services/feeCalculationService/feeCalculationService";
 
+const rn = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
+
 const config = {
-  //from 10 of the spec to 20
-  CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE: 20,
-  //from 200 of the spec to 300
-  MIN_CART_VALUE_FOR_FREE_DELIVERY: 300,
-  //from 15 of the spec to 30
-  MAX_DELIVERY_FEE: 15,
-  //from 2 of the spec to 3
-  INITIAL_DELIVERY_FEE: 3,
-  //from 1 of the spec to 2
-  ADDITIONAL_DISTANCE_FEE: 2,
-  //from 1000 of the spec to 1100
-  DISTANCE_AFTER_ADDITIONAL_FEE_STARTS: 1100,
-  //from 500 of the spec to 600
-  ADDITIONAL_DISTANCE_INTERVAL: 600,
+  CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE: rn(1, 20),
+  MIN_CART_VALUE_FOR_FREE_DELIVERY: rn(20, 500),
+  MAX_DELIVERY_FEE: rn(1, 30),
+  INITIAL_DELIVERY_FEE: rn(1, 3),
+  ADDITIONAL_DISTANCE_FEE: rn(1, 3),
+  DISTANCE_AFTER_ADDITIONAL_FEE_STARTS: rn(1, 1e6),
+  ADDITIONAL_DISTANCE_INTERVAL: rn(1, 1e6),
   RUSH_HOUR_START_HOUR: 15,
   RUSH_HOUR_END_HOUR: 19,
   RUSH_HOUR_DAY: 5,
-  //from 1.2 of the spec to 1.3
-  RUSH_HOUR_FEE_MULTIPLIER: 1.3,
+  RUSH_HOUR_FEE_MULTIPLIER: rn(1, 2) / 2,
   BULK_ITEMS_TIER_1_THRESHOLD: 4,
   BULK_ITEMS_TIER_2_THRESHOLD: 12,
   BULK_ITEMS_TIER_1_FEE: 0.5,
@@ -119,9 +113,14 @@ describe(`If the number of items is five or more, an additional 50 cent surcharg
 
 describe("Total fee calculations", () => {
   it(`The delivery fee can never be more than ${config.MAX_DELIVERY_FEE}€, including possible surcharges.`, () => {
-    expect(getDeliveryFee({ distance: 100000, cartValue: 1, numberOfItems: 1, orderTime: NOT_RUSH_HOUR_DATE })).toBe(
-      15
-    );
+    expect(
+      getDeliveryFee({
+        distance: Number.MAX_SAFE_INTEGER,
+        cartValue: 1,
+        numberOfItems: 1,
+        orderTime: NOT_RUSH_HOUR_DATE,
+      })
+    ).toBe(config.MAX_DELIVERY_FEE);
   });
 
   it(`The delivery is free (0€) when the cart value is equal or more than ${config.MIN_CART_VALUE_FOR_FREE_DELIVERY}€.`, () => {
