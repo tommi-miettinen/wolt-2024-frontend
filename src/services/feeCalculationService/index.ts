@@ -1,5 +1,5 @@
 import { createFeeCalculationService } from "./feeCalculationService";
-export { deliveryFeeInputSchema } from "./schemas";
+export * from "./schemas";
 
 export const feeCalculationService = createFeeCalculationService({
   CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE: 10,

@@ -65,8 +65,10 @@ describe(`If the number of items is five or more, an additional 50 cent surcharg
   it("If the number of items is 4, no extra surcharge", () => expect(getBulkFee(4)).toBe(0));
   it("If the number of items is 5, 50 cents surcharge is added", () => expect(getBulkFee(5)).toBe(0.5));
   it("If the number of items is 10, 3€ surcharge (6 x 50 cents) is added", () => expect(getBulkFee(10)).toBe(3));
-  it("If the number of items is 13, 5.70€ surcharge is added ((9 * 50 cents) + 1.20€)", () => expect(getBulkFee(13)).toBe(5.7));
-  it("If the number of items is 14, 6.20€ surcharge is added ((10 * 50 cents) + 1.20€)", () => expect(getBulkFee(14)).toBe(6.2));
+  it("If the number of items is 13, 5.70€ surcharge is added ((9 * 50 cents) + 1.20€)", () =>
+    expect(getBulkFee(13)).toBe(5.7));
+  it("If the number of items is 14, 6.20€ surcharge is added ((10 * 50 cents) + 1.20€)", () =>
+    expect(getBulkFee(14)).toBe(6.2));
   it("Floats result in ZodError", () => expect(getBulkFee(13.99999)).toBeInstanceOf(ZodError));
   it("Other types of invalid inputs result in ZodError", () => {
     expect(getBulkFee(0)).toBeInstanceOf(ZodError);
@@ -80,34 +82,49 @@ describe(`If the number of items is five or more, an additional 50 cent surcharg
 
 describe("Total fee calculations", () => {
   it("The delivery fee can never be more than 15€, including possible surcharges.", () => {
-    expect(getDeliveryFee({ distance: 100000, cartValue: 1, numberOfItems: 1, orderTime: NOT_RUSH_HOUR_DATE })).toBe(15);
+    expect(getDeliveryFee({ distance: 100000, cartValue: 1, numberOfItems: 1, orderTime: NOT_RUSH_HOUR_DATE })).toBe(
+      15
+    );
   });
 
   it("The delivery is free (0€) when the cart value is equal or more than 200€.", () => {
     expect(getDeliveryFee({ distance: 1, cartValue: 200, numberOfItems: 1, orderTime: NOT_RUSH_HOUR_DATE })).toBe(0);
-    expect(getDeliveryFee({ distance: 1, cartValue: 200.000001, numberOfItems: 1, orderTime: NOT_RUSH_HOUR_DATE })).toBe(0);
-    expect(getDeliveryFee({ distance: 1, cartValue: 199.999999, numberOfItems: 1, orderTime: NOT_RUSH_HOUR_DATE })).toBe(2);
+    expect(
+      getDeliveryFee({ distance: 1, cartValue: 200.000001, numberOfItems: 1, orderTime: NOT_RUSH_HOUR_DATE })
+    ).toBe(0);
+    expect(
+      getDeliveryFee({ distance: 1, cartValue: 199.999999, numberOfItems: 1, orderTime: NOT_RUSH_HOUR_DATE })
+    ).toBe(2);
   });
 
   it(`Returns ZodError on invalid inputs`, () => {
-    expect(getDeliveryFee({ distance: 0, cartValue: 0, numberOfItems: 0, orderTime: NOT_RUSH_HOUR_DATE })).toBeInstanceOf(ZodError);
-    expect(getDeliveryFee({ distance: -1, cartValue: -1, numberOfItems: -1, orderTime: NOT_RUSH_HOUR_DATE })).toBeInstanceOf(ZodError);
+    expect(
+      getDeliveryFee({ distance: 0, cartValue: 0, numberOfItems: 0, orderTime: NOT_RUSH_HOUR_DATE })
+    ).toBeInstanceOf(ZodError);
+    expect(
+      getDeliveryFee({ distance: -1, cartValue: -1, numberOfItems: -1, orderTime: NOT_RUSH_HOUR_DATE })
+    ).toBeInstanceOf(ZodError);
+
+    expect(
+      // @ts-expect-error expecting error on invalid input
+      getDeliveryFee({ distance: "1", cartValue: "1", numberOfItems: "1", orderTime: new Date("invalid date") })
+    ).toBeInstanceOf(ZodError);
     // @ts-expect-error expecting error on invalid input
-    expect(getDeliveryFee({ distance: "1", cartValue: "1", numberOfItems: "1", orderTime: new Date("invalid date") })).toBeInstanceOf(
+    expect(getDeliveryFee({ distance: 1, cartValue: 1, numberOfItems: 1, orderTime: "invalid date" })).toBeInstanceOf(
       ZodError
     );
-    // @ts-expect-error expecting error on invalid input
-    expect(getDeliveryFee({ distance: 1, cartValue: 1, numberOfItems: 1, orderTime: "invalid date" })).toBeInstanceOf(ZodError);
-    expect(getDeliveryFee({ distance: 1, cartValue: 1, numberOfItems: 1, orderTime: new Date("invalid date") })).toBeInstanceOf(ZodError);
-    expect(getDeliveryFee({ distance: 1, cartValue: 1, numberOfItems: -1, orderTime: new Date("2021-10-01T14:59") })).toBeInstanceOf(
-      ZodError
-    );
-    expect(getDeliveryFee({ distance: 1, cartValue: -1, numberOfItems: 1, orderTime: new Date("2021-10-01T14:59") })).toBeInstanceOf(
-      ZodError
-    );
-    expect(getDeliveryFee({ distance: -1.001, cartValue: 1, numberOfItems: 1, orderTime: new Date("2021-10-01T14:59") })).toBeInstanceOf(
-      ZodError
-    );
+    expect(
+      getDeliveryFee({ distance: 1, cartValue: 1, numberOfItems: 1, orderTime: new Date("invalid date") })
+    ).toBeInstanceOf(ZodError);
+    expect(
+      getDeliveryFee({ distance: 1, cartValue: 1, numberOfItems: -1, orderTime: new Date("2021-10-01T14:59") })
+    ).toBeInstanceOf(ZodError);
+    expect(
+      getDeliveryFee({ distance: 1, cartValue: -1, numberOfItems: 1, orderTime: new Date("2021-10-01T14:59") })
+    ).toBeInstanceOf(ZodError);
+    expect(
+      getDeliveryFee({ distance: -1.001, cartValue: 1, numberOfItems: 1, orderTime: new Date("2021-10-01T14:59") })
+    ).toBeInstanceOf(ZodError);
   });
 });
 

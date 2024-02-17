@@ -1,7 +1,9 @@
 import { ZodError } from "zod";
-import { deliveryFeeInputSchema, DeliveryFeeInput, FeeServiceConfig } from "./schemas";
+import { deliveryFeeInputSchema, DeliveryFeeInput, FeeServiceConfig, FeeServiceSchema } from "./schemas";
 
 export const createFeeCalculationService = (config: FeeServiceConfig) => {
+  FeeServiceSchema.parse(config);
+
   const isRushHour = (date: Date) => {
     const validationResult = deliveryFeeInputSchema.shape.orderTime.safeParse(date);
     if (!validationResult.success) return validationResult.error;

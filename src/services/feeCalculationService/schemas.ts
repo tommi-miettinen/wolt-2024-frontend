@@ -15,7 +15,7 @@ export const FeeServiceSchema = z
     RUSH_HOUR_START_HOUR: z.number().nonnegative().int().min(0).max(23),
     RUSH_HOUR_END_HOUR: z.number().nonnegative().int().min(0).max(23),
     RUSH_HOUR_DAY: z.number().nonnegative().int().min(0).max(6),
-    RUSH_HOUR_FEE_MULTIPLIER: z.number().nonnegative().int(),
+    RUSH_HOUR_FEE_MULTIPLIER: z.number().nonnegative(),
     BULK_ITEMS_TIER_1_THRESHOLD: z.number().nonnegative().int(),
     BULK_ITEMS_TIER_2_THRESHOLD: z.number().nonnegative().int(),
     BULK_ITEMS_TIER_1_FEE: z.number().nonnegative().max(5, {
