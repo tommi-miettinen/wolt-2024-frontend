@@ -1,6 +1,8 @@
 import { ZodError } from "zod";
 import { deliveryFeeInputSchema, DeliveryFeeInput, FeeServiceConfig, FeeServiceSchema } from "./schemas";
 
+const toFloat = (v: number) => +v.toFixed(2);
+
 export const createFeeCalculationService = (config: FeeServiceConfig) => {
   FeeServiceSchema.parse(config);
 
@@ -17,7 +19,9 @@ export const createFeeCalculationService = (config: FeeServiceConfig) => {
     const validationResult = deliveryFeeInputSchema.shape.cartValue.safeParse(cartValue);
     if (!validationResult.success) return validationResult.error;
 
-    return +Math.max(0, config.CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE - cartValue).toFixed(2);
+    const fee = config.CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE - cartValue;
+
+    return toFloat(Math.max(0, fee));
   };
 
   const getBulkFee = (numberOfItems: number) => {
@@ -31,7 +35,7 @@ export const createFeeCalculationService = (config: FeeServiceConfig) => {
       fee += config.BULK_ITEMS_TIER_2_FEE;
     }
 
-    return +fee.toFixed(2);
+    return toFloat(fee);
   };
 
   /**
@@ -46,8 +50,9 @@ export const createFeeCalculationService = (config: FeeServiceConfig) => {
     const distanceBeyondBase = distance - config.DISTANCE_AFTER_ADDITIONAL_FEE_STARTS;
     const intervalsOverBase = Math.ceil(distanceBeyondBase / config.ADDITIONAL_DISTANCE_INTERVAL);
     const additionalFee = intervalsOverBase * config.ADDITIONAL_DISTANCE_FEE;
+    const fee = config.INITIAL_DELIVERY_FEE + additionalFee;
 
-    return +(config.INITIAL_DELIVERY_FEE + additionalFee).toFixed(2);
+    return toFloat(fee);
   };
 
   const getDeliveryFee = (deliveryFeeInput: DeliveryFeeInput) => {
@@ -77,7 +82,7 @@ export const createFeeCalculationService = (config: FeeServiceConfig) => {
       fee = fee * safeMultiplier;
     }
 
-    return +Math.min(config.MAX_DELIVERY_FEE, fee).toFixed(2);
+    return toFloat(Math.min(config.MAX_DELIVERY_FEE, fee));
   };
 
   return {

@@ -5,38 +5,36 @@ const maxErrorMsg = (max: number) =>
 
 export const FeeServiceSchema = z
   .object({
-    CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE: z.number().nonnegative().int(),
+    CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE: z.number().min(0),
     MIN_CART_VALUE_FOR_FREE_DELIVERY: z
       .number()
-      .nonnegative()
-      .int()
+      .min(0)
       .max(500, {
         message: maxErrorMsg(500),
       }),
     MAX_DELIVERY_FEE: z
       .number()
-      .nonnegative()
-      .int()
+      .min(0)
       .max(30, {
         message: maxErrorMsg(30),
       }),
     INITIAL_DELIVERY_FEE: z
       .number()
-      .nonnegative()
+      .min(0)
       .max(3, {
         message: maxErrorMsg(3),
       }),
     ADDITIONAL_DISTANCE_FEE: z
       .number()
-      .nonnegative()
+      .min(0)
       .max(3, {
         message: maxErrorMsg(3),
       }),
     DISTANCE_AFTER_ADDITIONAL_FEE_STARTS: z.number().positive().int(),
     ADDITIONAL_DISTANCE_INTERVAL: z.number().positive().int(),
-    RUSH_HOUR_START_HOUR: z.number().nonnegative().int().min(0).max(23),
-    RUSH_HOUR_END_HOUR: z.number().nonnegative().int().min(0).max(23),
-    RUSH_HOUR_DAY: z.number().nonnegative().int().min(0).max(6),
+    RUSH_HOUR_START_HOUR: z.number().int().min(0).max(23),
+    RUSH_HOUR_END_HOUR: z.number().int().min(0).max(23),
+    RUSH_HOUR_DAY: z.number().int().min(0).max(6),
     RUSH_HOUR_FEE_MULTIPLIER: z
       .number()
       .min(1)
@@ -47,13 +45,13 @@ export const FeeServiceSchema = z
     BULK_ITEMS_TIER_2_THRESHOLD: z.number().nonnegative().int(),
     BULK_ITEMS_TIER_1_FEE: z
       .number()
-      .nonnegative()
+      .min(0)
       .max(3, {
         message: maxErrorMsg(3),
       }),
     BULK_ITEMS_TIER_2_FEE: z
       .number()
-      .nonnegative()
+      .min(0)
       .max(3, {
         message: maxErrorMsg(3),
       }),

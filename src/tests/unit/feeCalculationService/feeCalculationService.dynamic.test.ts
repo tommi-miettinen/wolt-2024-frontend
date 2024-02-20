@@ -13,23 +13,28 @@ might result in invalid inputs like 0 that would cause validation errors.
 These threshold conditions are tested separately.
 */
 
+/*
+Randomized values have some constraints to make the dynamic test cases
+viable to create, edge cases are tested separately without these constraints at the end.
+*/
+
 const runTests = () => {
   const config = {
     CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE: rn(2, 20),
-    MIN_CART_VALUE_FOR_FREE_DELIVERY: rn(20, 500),
-    INITIAL_DELIVERY_FEE: rf(2, 3),
+    MIN_CART_VALUE_FOR_FREE_DELIVERY: rn(21, 500),
+    INITIAL_DELIVERY_FEE: rf(0, 3),
     MAX_DELIVERY_FEE: rn(3, 30),
-    ADDITIONAL_DISTANCE_FEE: rf(0, 3),
-    DISTANCE_AFTER_ADDITIONAL_FEE_STARTS: rn(2, 1e6),
-    ADDITIONAL_DISTANCE_INTERVAL: rn(2, 1e6),
+    ADDITIONAL_DISTANCE_FEE: rf(0.1, 3),
+    DISTANCE_AFTER_ADDITIONAL_FEE_STARTS: rn(2, 1e4),
+    ADDITIONAL_DISTANCE_INTERVAL: rn(2, 1e4),
     RUSH_HOUR_START_HOUR: 15,
     RUSH_HOUR_END_HOUR: 19,
     RUSH_HOUR_DAY: 5,
     RUSH_HOUR_FEE_MULTIPLIER: rf(1, 3),
     BULK_ITEMS_TIER_1_THRESHOLD: rn(2, 10),
     BULK_ITEMS_TIER_2_THRESHOLD: rn(11, 20),
-    BULK_ITEMS_TIER_1_FEE: rf(0, 3),
-    BULK_ITEMS_TIER_2_FEE: rf(0, 3),
+    BULK_ITEMS_TIER_1_FEE: rf(0.1, 3),
+    BULK_ITEMS_TIER_2_FEE: rf(0.1, 3),
   };
 
   const { getSmallOrderSurcharge, getFeeByDistance, getBulkFee, getDeliveryFee, isRushHour } =
@@ -177,7 +182,6 @@ The surcharge is the difference between the cart value and ${config.CART_VALUE_T
       description: `The delivery fee can never be more than ${config.MAX_DELIVERY_FEE}€, including possible surcharges.`,
       input: {
         ...validDefault,
-        cartValue: config.MIN_CART_VALUE_FOR_FREE_DELIVERY - 0.01,
         distance: Number.MAX_SAFE_INTEGER,
       },
       expected: config.MAX_DELIVERY_FEE,
@@ -259,7 +263,7 @@ The surcharge is the difference between the cart value and ${config.CART_VALUE_T
     },
     {
       description: "Bulk items tier 1 threshold must be less than bulk items tier 2 threshold",
-      input: { ...config, BULK_ITEMS_TIER_1_THRESHOLD: 20, BULK_ITEMS_TIER_2_THRESHOLD: 19 },
+      input: { ...config, BULK_ITEMS_TIER_1_THRESHOLD: 20, BULK_ITEMS_TIER_2_THRESHOLD: 20 },
       expected: "Throw",
     },
     {
@@ -284,6 +288,40 @@ The surcharge is the difference between the cart value and ${config.CART_VALUE_T
         return it(description, () => expect(() => createFeeCalculationService(input)).toThrow());
       }
       it(description, () => expect(() => createFeeCalculationService(input)).not.toThrow());
+    });
+  });
+
+  describe("Edge cases", () => {
+    it("Additional fee can be set to 0", () => {
+      const { getFeeByDistance } = createFeeCalculationService({ ...config, ADDITIONAL_DISTANCE_FEE: 0 });
+      expect(getFeeByDistance(Number.MAX_SAFE_INTEGER)).toBe(config.INITIAL_DELIVERY_FEE);
+    });
+
+    it("Initial distance fee can be set to 0", () => {
+      const { getFeeByDistance } = createFeeCalculationService({
+        ...config,
+        INITIAL_DELIVERY_FEE: 0,
+        ADDITIONAL_DISTANCE_FEE: 0,
+      });
+      expect(getFeeByDistance(Number.MAX_SAFE_INTEGER)).toBe(0);
+    });
+
+    it("Bulk items fees can be set to 0", () => {
+      const { getBulkFee } = createFeeCalculationService({
+        ...config,
+        BULK_ITEMS_TIER_1_FEE: 0,
+        BULK_ITEMS_TIER_2_FEE: 0,
+      });
+      expect(getBulkFee(Number.MAX_SAFE_INTEGER)).toBe(0);
+    });
+
+    it(`No fee when cart value is over free threshold but less than surcharge threshold`, () => {
+      const { getDeliveryFee } = createFeeCalculationService({
+        ...config,
+        MIN_CART_VALUE_FOR_FREE_DELIVERY: 200,
+        CART_VALUE_THRESHOLD_FOR_NO_SURCHARGE: 250,
+      });
+      expect(getDeliveryFee({ ...validDefault, cartValue: 200 })).toBe(0);
     });
   });
 };
