@@ -34,6 +34,9 @@ export const createFeeCalculationService = (config: FeeServiceConfig) => {
     return +fee.toFixed(2);
   };
 
+  /**
+   * @param distance in meters
+   */
   const getFeeByDistance = (distance: number) => {
     const validationResult = deliveryFeeInputSchema.shape.distance.safeParse(distance);
     if (!validationResult.success) return validationResult.error;
@@ -70,7 +73,8 @@ export const createFeeCalculationService = (config: FeeServiceConfig) => {
     let fee = feeByDistanceResult + bulkFeeResult + smallOrderSurcharge;
 
     if (rushHourResult) {
-      fee = fee * config.RUSH_HOUR_FEE_MULTIPLIER;
+      const safeMultiplier = Math.max(1, config.RUSH_HOUR_FEE_MULTIPLIER);
+      fee = fee * safeMultiplier;
     }
 
     return +Math.min(config.MAX_DELIVERY_FEE, fee).toFixed(2);

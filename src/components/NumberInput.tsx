@@ -29,7 +29,7 @@ const NumberInput = ({ onChange, maxValue, minValue, decimalPlaces = 0, ...rest 
 
     if (!regex.test(value)) return;
 
-    const validationResult = z.number().min(minValue).max(maxValue).safeParse(parseFloat(value));
+    const validationResult = z.number().min(minValue).max(maxValue).safeParse(+parseFloat(value));
     if (!validationResult.success) return;
 
     setInputValue(value);

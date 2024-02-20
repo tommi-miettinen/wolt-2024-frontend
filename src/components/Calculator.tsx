@@ -67,7 +67,11 @@ const Calculator = () => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-1">
           <label htmlFor="cartValue">{t(TranslationKeys.CART_VALUE)}</label>
-          <Tooltip triggerAriaLabel="Info about surcharge" trigger={<InfoIcon />} content={t(TranslationKeys.CART_VALUE_INPUT_INFO)} />
+          <Tooltip
+            triggerAriaLabel="Info about surcharge"
+            trigger={<InfoIcon />}
+            content={t(TranslationKeys.CART_VALUE_INPUT_INFO)}
+          />
         </div>
         <NumberInput
           id="cartValue"

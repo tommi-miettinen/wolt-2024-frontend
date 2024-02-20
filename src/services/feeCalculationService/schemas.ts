@@ -23,25 +23,23 @@ export const FeeServiceSchema = z
     INITIAL_DELIVERY_FEE: z
       .number()
       .nonnegative()
-      .int()
       .max(3, {
         message: maxErrorMsg(3),
       }),
     ADDITIONAL_DISTANCE_FEE: z
       .number()
       .nonnegative()
-      .int()
       .max(3, {
         message: maxErrorMsg(3),
       }),
-    DISTANCE_AFTER_ADDITIONAL_FEE_STARTS: z.number().nonnegative().int(),
-    ADDITIONAL_DISTANCE_INTERVAL: z.number().nonnegative().int(),
+    DISTANCE_AFTER_ADDITIONAL_FEE_STARTS: z.number().positive().int(),
+    ADDITIONAL_DISTANCE_INTERVAL: z.number().positive().int(),
     RUSH_HOUR_START_HOUR: z.number().nonnegative().int().min(0).max(23),
     RUSH_HOUR_END_HOUR: z.number().nonnegative().int().min(0).max(23),
     RUSH_HOUR_DAY: z.number().nonnegative().int().min(0).max(6),
     RUSH_HOUR_FEE_MULTIPLIER: z
       .number()
-      .nonnegative()
+      .min(1)
       .max(3, {
         message: maxErrorMsg(3),
       }),
